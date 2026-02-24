@@ -78,7 +78,18 @@ function aktif_tema_ayarla($tema_adi)
 
     if (!is_dir($tema_klasor)) {
         $tema_adi = 'varsayilan';
+        $tema_klasor = $bozkurt['tema_yolu'] . '/varsayilan';
     }
+
+    // ===================== BAŞLANGIÇ: TEMA SÖZLEŞMESİ FAIL-OPEN =====================
+    if (class_exists('TemaSozlesmesi')) {
+        $dogrulama = TemaSozlesmesi::temaSozlesmesiniDogrula($tema_klasor);
+        if (!($dogrulama['gecerli'] ?? false)) {
+            // Runtime'da siteyi ayakta tutmak için varsayılan temaya düş.
+            $tema_adi = 'varsayilan';
+        }
+    }
+    // ===================== BİTİŞ: TEMA SÖZLEŞMESİ FAIL-OPEN =====================
 
     $bozkurt['tema_adi'] = $tema_adi;
     return $bozkurt['tema_adi'];

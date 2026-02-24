@@ -26,10 +26,19 @@ class TemaSozlesmesi
     public static function kancaTakmaAdlari(): array
     {
         return [
+            // Eski isimler
             'ust_basi' => 'head_basi',
             'ust_sonu' => 'head_sonu',
             'alt_basi' => 'footer_basi',
             'alt_sonu' => 'footer_sonu',
+
+            // Geçiş/fallback (standart isimler açıkça korunur)
+            'head_basi' => 'head_basi',
+            'head_sonu' => 'head_sonu',
+            'body_basi' => 'body_basi',
+            'body_sonu' => 'body_sonu',
+            'footer_basi' => 'footer_basi',
+            'footer_sonu' => 'footer_sonu',
         ];
     }
 
