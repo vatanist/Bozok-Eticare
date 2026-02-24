@@ -1,25 +1,42 @@
-# CakePHP 3
+# V-Commerce .gitignore
 
-/vendor/*
-/config/app.php
+# Composer
+/vendor/
+composer.lock
 
-/tmp/cache/models/*
-!/tmp/cache/models/empty
-/tmp/cache/persistent/*
-!/tmp/cache/persistent/empty
-/tmp/cache/views/*
-!/tmp/cache/views/empty
-/tmp/sessions/*
-!/tmp/sessions/empty
-/tmp/tests/*
-!/tmp/tests/empty
+# Ortam değişkenleri
+.env
 
-/logs/*
-!/logs/empty
+# Depolama
+/storage/logs/*
+/storage/cache/*
+!/storage/logs/.gitkeep
+!/storage/cache/.gitkeep
 
-# CakePHP 2
+# Yüklenen dosyalar
+/data/uploads/*
+!/data/uploads/.gitkeep
 
-/app/tmp/*
-/app/Config/core.php
-/app/Config/database.php
-/vendors/*
+# OS & IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Geçici dosyalar
+*.tmp
+*.bak
+
+# Debug
+php_errorlog
+error_log
+
+# Kurulum (production'da sil)
+# install.php
+# setup.php
+
+# Zip / gereksiz
+*.zip
+*.pdf

@@ -1,0 +1,28 @@
+<?php
+/**
+ * V-Commerce — HomeController
+ *
+ * Anasayfa: öne çıkan ürünler, yeni ürünler, kategoriler.
+ *
+ * @package App\Controllers
+ */
+
+namespace App\Controllers;
+
+class HomeController extends BaseController
+{
+    /**
+     * Anasayfa görünümü
+     */
+    public function index(): void
+    {
+        $veriler = [
+            'sayfa_basligi' => ayar_getir('site_title', 'V-Commerce'),
+            'one_cikanlar' => one_cikan_urunler(8),
+            'yeni_urunler' => en_yeni_urunler(8),
+            'kategoriler' => kategorileri_getir()
+        ];
+
+        $this->view('anasayfa', $veriler);
+    }
+}

@@ -1,0 +1,12 @@
+/* ══════════════════════════════════════════════════════════
+   V-Commerce — Lacivert / Turuncu Teması  (varsayılan)
+   ══════════════════════════════════════════════════════════ */
+:root {
+    --primary:       #1a56db;
+    --primary-dark:  #1040a0;
+    --primary-light: #e8effc;
+    --secondary:     #f97316;
+    --secondary-dark:#d95f0e;
+    --accent:        #059669;
+    --accent-light:  #d1fae5;
+}

@@ -1,0 +1,134 @@
+# V-Commerce - Apache / LiteSpeed Konfigürasyonu
+# DirectAdmin / cPanel uyumlu — Shared hosting optimize
+# Apache 2.4+ syntax
+
+Options -Indexes
+Options +FollowSymLinks
+
+# ============================================
+# MOD_REWRITE - Akıllı URL Yönlendirme
+# ============================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Alt klasörde çalışıyorsa base path ayarla (örn: /demo/)
+    # RewriteBase /alt-klasor/
+
+    # ── PERFORMANS: Static dosyalar — dosya varsa hemen servis et ──
+    # 1) Uzantı kontrolü → sadece bilinen static uzantılar hedeflenir
+    # 2) -f kontrolü → fiziksel dosya GERÇEKTEN varsa servis et
+    # Bu iki koşul BİRLİKTE çalışır:
+    #   /assets/css/style.css (dosya var) → Apache servis eder, PHP çağrılmaz ✅
+    #   /urun/samsung-s24.css (dosya yok) → bu kurala takılmaz, index.php'ye düşer ✅
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule \.(css|js|jpg|jpeg|png|gif|webp|svg|ico|woff2|woff|ttf|eot|mp4|webm|pdf|map)$ - [L]
+
+    # ── HASSAS DİZİNLER: Doğrudan erişimi engelle (403 Forbidden) ──
+    RewriteRule ^(config|includes|bootstrap|storage|core|app|vendor)/.*$ - [F,L]
+
+    # ── UPLOADS GÜVENLİĞİ: PHP/Script çalışmasını engelle ──
+    RewriteRule ^data/uploads/.*\.(php[0-9]?|phtml|phar|phps|cgi|pl|py|sh|bash)$ - [F,L]
+
+    # ── UPLOADS: Sadece güvenli dosya türlerine izin ver ──
+    RewriteCond %{REQUEST_URI} ^/data/uploads/ [NC]
+    RewriteCond %{REQUEST_URI} !\.(jpg|jpeg|png|gif|webp|svg|pdf|ico|mp4|webm|css|js|woff2|woff|ttf|eot)$ [NC]
+    RewriteRule .* - [F,L]
+
+    # ── HTTPS YÖNLENDİRME ──
+    # SSL sertifikası aktifken bu bloğun yorumunu kaldırın.
+    # Production'da HTTPS zorunlu olmalı.
+    # RewriteCond %{HTTPS} !=on
+    # RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+    # ── ANA REWRITE KURALI ──
+    # Gerçek dosya varsa → doğrudan servis et (PHP'ye yönlendirME):
+    #   ✅ admin/*.php    → doğrudan çalışır
+    #   ✅ modul-isleyici.php → doğrudan çalışır (PayTR callback!)
+    #   ✅ install.php    → doğrudan çalışır
+    #   ✅ sepet.php      → shadow mode'da çalışır
+    #
+    # Gerçek dosya/klasör DEĞİLSE → index.php (Front Controller):
+    #   ✅ /urun/samsung-s24     → Router
+    #   ✅ /sepet                → Router
+    #   ✅ /urun/fake-slug.css   → Router (dosya yok, static kuralına takılmaz)
+    #
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Dosya yoksa → index.php Front Controller'a yönlendir
+    # [QSA] = Query String Append — eski query parametreleri KORUNUR
+    # Örn: /ara?q=laptop&page=2 → index.php?q=laptop&page=2 (kayıp yok)
+    RewriteRule ^ index.php [L,QSA]
+
+</IfModule>
+
+# ============================================
+# GÜVENLİK
+# ============================================
+
+# Hassas dosyalara doğrudan HTTP erişimini engelle
+# Apache 2.4+ syntax (Order/Deny deprecated)
+<FilesMatch "(^\.htaccess|\.env|config\.php|db\.php|\.git|composer\.json|composer\.lock)">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    # Apache 2.2 fallback
+    <IfModule !mod_authz_core.c>
+        Order Allow,Deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Yedek koruma: uploads klasöründe PHP çalışmasını zorla engelle
+<IfModule mod_headers.c>
+    <FilesMatch "\.(php[0-9]?|phtml|phar)$">
+        <If "%{REQUEST_URI} =~ m#^/data/uploads/#">
+            ForceType text/plain
+        </If>
+    </FilesMatch>
+</IfModule>
+
+# ============================================
+# HTTP GÜVENLİK BAŞLIKLARI
+# ============================================
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # HSTS — YALNIZCA SSL sertifikası aktif ve test edilmişse açın.
+    # Açmadan önce checklist:
+    #   1. SSL sertifikası kurulu ve aktif
+    #   2. HTTP→HTTPS redirect çalışıyor (yukarıdaki HTTPS bloğu açık)
+    #   3. Mixed content yok (tüm kaynaklar https://)
+    #   4. Admin panel HTTPS'te sorunsuz
+    # Hepsi OK ise yorumu kaldırın:
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    # PHP versiyon bilgisini gizle
+    Header unset X-Powered-By
+</IfModule>
+
+# ============================================
+# PERFORMANS - GZIP & CACHE
+# ============================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType application/x-font-woff2 "access plus 1 month"
+</IfModule>

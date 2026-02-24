@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Admin ve müşteri panelini tara
+Disallow: /admin/
+Disallow: /client/
+Disallow: /ajax/
+Disallow: /api/
+Disallow: /config/
+Disallow: /data/
+Disallow: /install.php
+Disallow: /setup.php
+
+# Dinamik filtreleri engelle (duplicate content önleme)
+Disallow: /products.php?page=
+Disallow: /search.php?q=
+
+# Sitemap adresi
+Sitemap: https://SITEADRESINIZ.COM/sitemap.php

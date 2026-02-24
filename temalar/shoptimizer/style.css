@@ -1,0 +1,22 @@
+/**
+ * Theme Name: Shoptimizer V-Commerce Port
+ * Theme URI: https://www.commercegurus.com/shoptimizer
+ * Author: CommerceGurus & Bozkurt Port
+ * Description: Shoptimizer'ın hızı ve dönüşüm odaklı tasarımı V-Commerce çekirdeğine uyarlandı. Elementor'dan arındırılmış, hafifletilmiş sürüm.
+ * Version: 2.9.1-VC
+ * Text Domain: shoptimizer
+ */
+
+/* V-Commerce için özel reset ve temel stiller */
+:root {
+    --primary: #10b981;
+    --primary-dark: #059669;
+    --dark: #0f172a;
+    --gray: #64748b;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--dark);
+    line-height: 1.6;
+}
