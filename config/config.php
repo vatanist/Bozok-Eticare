@@ -75,7 +75,8 @@ $coreClasses = [
     'Affiliate',
     'Marketing',
     'ApiController',
-    'Notification'
+    'Notification',
+    'KurServisi'
 ];
 foreach ($coreClasses as $class) {
     if (!class_exists($class)) {
@@ -100,6 +101,13 @@ foreach ($adapterClasses as $adapter) {
 // Veritabanı Örneğini İlklendir (Global Erişilebilirlik)
 $database = Database::getInstance();
 $db = $database->getConnection();
+
+// ===================== BAŞLANGIÇ: AKTİF TEMA YÜKLEME =====================
+if (function_exists('aktif_tema_ayarla')) {
+    $aktif_tema = function_exists('ayar_getir') ? ayar_getir('active_theme', 'varsayilan') : 'varsayilan';
+    aktif_tema_ayarla($aktif_tema);
+}
+// ===================== BİTİŞ: AKTİF TEMA YÜKLEME =====================
 
 // Global Tracking (Ziyaretçi ve Referans Takibi)
 if (function_exists('isAdmin') && !isAdmin()) {

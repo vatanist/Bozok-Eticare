@@ -16,8 +16,8 @@
                     Sezon Koleksiyonu</span>
                 <h1 style="font-size: 4rem; font-weight: 900; line-height: 1; color: var(--dark); margin: 20px 0;">Hız ve
                     Dönüşüm <br>Bir Arada.</h1>
-                <p style="color: var(--gray); font-size: 1.1rem; margin-bottom: 30px;">V-Commerce için özel olarak
-                    uyarlanmış Shoptimizer teması ile satışlarınızı katlayın.</p>
+                <p style="color: var(--gray); font-size: 1.1rem; margin-bottom: 30px;">Bozok E-Ticaret için özel olarak
+                    uyarlanmış Svs Tema ile satışlarınızı katlayın.</p>
                 <a href="<?= BASE_URL ?>/urunler.php" class="buton"
                     style="background: var(--dark); color: #fff; padding: 18px 45px; border-radius: 40px; font-weight: 800; text-decoration: none; display: inline-block;">Hemen
                     Alışverişe Başla <i class="fas fa-arrow-right"></i></a>
@@ -71,7 +71,7 @@
 <div class="shoptimizer-products-grid"
     style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 30px;">
     <?php foreach ($one_cikanlar as $u): ?>
-        <?php gorunum('urun/urun-kart', ['u' => $u]); ?>
+        <?php gorunum('urun-kart', ['u' => $u]); ?>
     <?php endforeach; ?>
 </div>
 

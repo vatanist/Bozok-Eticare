@@ -1,6 +1,8 @@
 </div><!-- container sonu -->
 </main>
 
+<?php hook_calistir('footer_basi'); ?>
+
 <footer class="site-footer">
     <div class="footer-newsletter">
         <div class="container newsletter-inner">
@@ -77,6 +79,7 @@
 
 <!-- Modül Footer Kancası -->
 <?php hook_calistir('footer_sonu'); ?>
+<?php hook_calistir('body_sonu'); ?>
 
 </body>
 

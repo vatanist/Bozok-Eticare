@@ -46,11 +46,44 @@ if (!function_exists('str_contains')) {
  * Site genelindeki tema ve modül ayarlarını tutar.
  */
 $bozkurt = [
-    'tema_adi' => isset($db) ? ayar_getir('active_theme', 'varsayilan') : 'varsayilan',
+    'tema_adi' => 'varsayilan',
     'modul_yolu' => __DIR__ . '/../moduller',
     'tema_yolu' => __DIR__ . '/../temalar',
     'surum' => '2.0.0'
 ];
+
+// ===================== BAŞLANGIÇ: TEMA ÇÖZÜMLEME =====================
+/**
+ * Tema adını geriye uyumluluk kuralları ile çözümler.
+ */
+function tema_adi_cozumle($tema_adi)
+{
+    $tema_adi = trim((string) $tema_adi);
+    $takma_adlar = [
+        'shoptimizer' => 'svs-tema',
+    ];
+
+    return $takma_adlar[$tema_adi] ?? $tema_adi;
+}
+
+/**
+ * Aktif tema adını güvenli şekilde günceller.
+ */
+function aktif_tema_ayarla($tema_adi)
+{
+    global $bozkurt;
+
+    $tema_adi = tema_adi_cozumle($tema_adi ?: 'varsayilan');
+    $tema_klasor = $bozkurt['tema_yolu'] . '/' . $tema_adi;
+
+    if (!is_dir($tema_klasor)) {
+        $tema_adi = 'varsayilan';
+    }
+
+    $bozkurt['tema_adi'] = $tema_adi;
+    return $bozkurt['tema_adi'];
+}
+// ===================== BİTİŞ: TEMA ÇÖZÜMLEME =====================
 
 // ==================== ÇEKİRDEK ARAÇLAR ====================
 
@@ -176,6 +209,19 @@ function hook_ekli_mi($ad)
 function hook_calistir($ad, $veriler = null)
 {
     global $bozkurt_hooks;
+
+    // ===================== BAŞLANGIÇ: KANCA ADI TAKMA İSİMLERİ =====================
+    $kanca_takma_adlari = [
+        'ust_basi' => 'head_basi',
+        'ust_sonu' => 'head_sonu',
+        'alt_basi' => 'footer_basi',
+        'alt_sonu' => 'footer_sonu',
+    ];
+
+    if (isset($kanca_takma_adlari[$ad])) {
+        $ad = $kanca_takma_adlari[$ad];
+    }
+    // ===================== BİTİŞ: KANCA ADI TAKMA İSİMLERİ =====================
 
     if (!isset($bozkurt_hooks[$ad])) {
         return $veriler;

@@ -9,7 +9,8 @@
             Ödeme</h1>
     </div>
 
-    <form action="<?= BASE_URL ?>/odeme.php?islem=tamamla" method="POST" id="checkoutForm">
+    <form action="<?= BASE_URL ?>/siparis-tamamla" method="POST" id="checkoutForm">
+        <?= csrf_kod() ?>
         <div style="display: grid; grid-template-columns: 1fr 400px; gap: 60px; align-items: start;">
 
             <!-- Sol: Adres ve Ödeme -->

@@ -19,7 +19,7 @@ class HomeController extends BaseController
         $veriler = [
             'sayfa_basligi' => ayar_getir('site_title', 'V-Commerce'),
             'one_cikanlar' => one_cikan_urunler(8),
-            'yeni_urunler' => en_yeni_urunler(8),
+            'en_yeniler' => en_yeni_urunler(8),
             'kategoriler' => kategorileri_getir()
         ];
 

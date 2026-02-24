@@ -1,4 +1,4 @@
-<?php gorunum('ortak/ust', ['sayfa_basligi' => $sayfa_basligi]); ?>
+<?php gorunum('ust', ['sayfa_basligi' => $sayfa_basligi]); ?>
 
 <div class="admin-themes-page" style="padding: 30px 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
@@ -89,4 +89,4 @@
     });
 </script>
 
-<?php gorunum('ortak/alt'); ?>
+<?php gorunum('alt'); ?>

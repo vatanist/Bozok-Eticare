@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= temiz($sayfa_basligi ?? 'V-Commerce - Premium E-Ticaret') ?></title>
 
+    <?php hook_calistir('head_basi'); ?>
+
     <!-- Tasarım ve İkonlar -->
     <link rel="stylesheet" href="<?= tema_linki('assets/css/style.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
