@@ -60,3 +60,13 @@
 - Bu P0 kapsamındaki düzenlemeler için **zorunlu yeni migration yoktur**.
 - Tema adı alias desteği (`shoptimizer -> svs-tema`) kod seviyesinde sağlanmıştır.
 - `active_theme` alanı DB'de eski değer olarak `shoptimizer` kalsa bile çalışma anında `svs-tema`ya çözümlenir.
+
+
+## 4) DirectAdmin Uyumluluk Kontrolü
+
+- `public_html` kök yapı teyidi: proje kökten çalışır, ayrı `public/` document root zorunluluğu yoktur.
+- Composer/SSH varsayımı yok: kurulum adımları shared hosting gerçekliğine uygundur.
+- `vendor` FTP notu: bağımlılıklar sunucuya FTP ile taşınacak şekilde tasarlanmıştır.
+- `.htaccess` kuralları korunur: Apache/LiteSpeed yönlendirme yapısı bozulmaz.
+- Yazma yolları shared hosting uyumlu: `storage/`, `storage/logs/`, `data/uploads/` gibi dizinler proje içinde ve göreli yoldadır.
+- `open_basedir` etkisi yok: çalışma anında kullanılan dosya yolları `public_html` altında kalacak şekilde planlanmıştır.
