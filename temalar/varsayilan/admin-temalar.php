@@ -44,6 +44,9 @@
                                 Sürüm: <span style="font-weight: 700; color: var(--dark);">
                                     <?= $t['version'] ?>
                                 </span> |
+                                Metadata: <span style="font-weight:700;color:var(--info,#0ea5e9);">
+                                    <?= temiz($t['metadata_kaynagi'] ?? 'yok') ?>
+                                </span> |
                                 Tasarlayan: <span style="font-weight: 700; color: var(--primary);">
                                     <?= $t['author'] ?>
                                 </span>
@@ -54,6 +57,19 @@
                     <p style="font-size: 0.9rem; color: #64748b; line-height: 1.6; margin-bottom: 25px;">
                         <?= temiz($t['description']) ?>
                     </p>
+
+                    
+
+                    <?php if (!($t['gecerli'] ?? true)): ?>
+                        <div style="background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:10px 12px;border-radius:10px;margin-bottom:15px;font-size:12px;">
+                            <strong>Tema sözleşmesi uyarısı:</strong>
+                            <ul style="margin:8px 0 0 16px;padding:0;">
+                                <?php foreach (($t['dogrulama_hatalari'] ?? []) as $hata): ?>
+                                    <li><?= temiz($hata) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
 
                     <div style="display: flex; gap: 12px;">
                         <?php if (!$t['active']): ?>

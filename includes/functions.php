@@ -210,18 +210,11 @@ function hook_calistir($ad, $veriler = null)
 {
     global $bozkurt_hooks;
 
-    // ===================== BAŞLANGIÇ: KANCA ADI TAKMA İSİMLERİ =====================
-    $kanca_takma_adlari = [
-        'ust_basi' => 'head_basi',
-        'ust_sonu' => 'head_sonu',
-        'alt_basi' => 'footer_basi',
-        'alt_sonu' => 'footer_sonu',
-    ];
-
-    if (isset($kanca_takma_adlari[$ad])) {
-        $ad = $kanca_takma_adlari[$ad];
+    // ===================== BAŞLANGIÇ: KANCA ADI ÇÖZÜMLEME =====================
+    if (class_exists('TemaSozlesmesi')) {
+        $ad = TemaSozlesmesi::kancaAdiCozumle($ad);
     }
-    // ===================== BİTİŞ: KANCA ADI TAKMA İSİMLERİ =====================
+    // ===================== BİTİŞ: KANCA ADI ÇÖZÜMLEME =====================
 
     if (!isset($bozkurt_hooks[$ad])) {
         return $veriler;

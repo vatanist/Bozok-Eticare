@@ -76,7 +76,8 @@ $coreClasses = [
     'Marketing',
     'ApiController',
     'Notification',
-    'KurServisi'
+    'KurServisi',
+    'TemaSozlesmesi'
 ];
 foreach ($coreClasses as $class) {
     if (!class_exists($class)) {
