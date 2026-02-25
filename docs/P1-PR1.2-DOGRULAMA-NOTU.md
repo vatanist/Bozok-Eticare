@@ -4,6 +4,7 @@
 
 - `gorunum_tema()` güvenlik kontrolleri güçlendirildi (yol/tema adı doğrulama, `is_file`, güvenli `extract`).
 - `gorunum()` için aktif tema -> `varsayilan` tema fallback akışı eklendi.
+- Asset uyumu düzeltildi: `render_tema_adi` ile fallback render sırasında `tema_linki()/tema_yolu()` doğru tema varlıklarını kullanır.
 - `TemaSozlesmesi` güncellendi:
   - Minimum zorunlu dosyalar ayrı tutuldu.
   - Opsiyonel/override edilebilir dosyalar ayrı tutuldu.
@@ -12,6 +13,7 @@
   - `gorunum_admin()` eklendi.
   - `admin/themes.php` ve `admin/plugins.php` artık `admin/views/` altını kullanıyor.
 - Router link hizalama için `url()` yardımcısı eklendi ve temel tema bağlantıları güncellendi.
+- `dogrula_csrf()` içinde token karşılaştırması `hash_equals` ile güvenli hale getirildi.
 
 ## Manuel Smoke Test Adımları
 

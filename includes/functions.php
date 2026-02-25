@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce - Bozkurt Core (Çekirdek Fonksiyonlar)
+ * Bozok E-Ticaret - Bozkurt Core (Çekirdek Fonksiyonlar)
  * 
  * Sadece çekirdek fonksiyonları içerir:
  * - PHP 8 Polyfill'ler
@@ -49,6 +49,7 @@ $bozkurt = [
     'tema_adi' => 'varsayilan',
     'modul_yolu' => __DIR__ . '/../moduller',
     'tema_yolu' => __DIR__ . '/../temalar',
+    'render_tema_adi' => null,
     'surum' => '2.0.0'
 ];
 
@@ -131,6 +132,16 @@ function url($yol = '')
 // ==================== TEMA SİSTEMİ ====================
 
 /**
+ * Tema/görünüm girdisinde yasak karakter var mı kontrol eder.
+ */
+function tema_gorunum_yasak_icerir($deger): bool
+{
+    return str_contains((string) $deger, '..')
+        || str_contains((string) $deger, "\0")
+        || str_contains((string) $deger, ':');
+}
+
+/**
  * Tema görünüm yolu doğrular.
  */
 function tema_gorunum_girdisi_dogrula($deger): bool
@@ -152,9 +163,8 @@ function gorunum($yol, $veriler = [])
     global $bozkurt;
 
     // ===================== BAŞLANGIÇ: GÖRÜNÜM GİRDİ GÜVENLİĞİ =====================
-    $yol = str_replace(['..', "\0", ':'], '', (string) $yol);
-    if (!tema_gorunum_girdisi_dogrula($yol)) {
-        throw new \App\Exceptions\ViewNotFoundException($yol);
+    if (tema_gorunum_yasak_icerir($yol) || !tema_gorunum_girdisi_dogrula((string) $yol)) {
+        throw new \App\Exceptions\ViewNotFoundException((string) $yol);
     }
     // ===================== BİTİŞ: GÖRÜNÜM GİRDİ GÜVENLİĞİ =====================
 
@@ -163,7 +173,7 @@ function gorunum($yol, $veriler = [])
     }
 
     // Otomatik SEO meta değişkenleri
-    $meta_title = $veriler['sayfa_basligi'] ?? ayar_getir('site_title', 'V-Commerce');
+    $meta_title = $veriler['sayfa_basligi'] ?? ayar_getir('site_title', 'Bozok E-Ticaret');
     $meta_desc = $veriler['meta_desc'] ?? '';
 
     // ===================== BAŞLANGIÇ: TEMA GÖRÜNÜM FALLBACK =====================
@@ -171,12 +181,22 @@ function gorunum($yol, $veriler = [])
     $varsayilan_sablon = $bozkurt['tema_yolu'] . '/varsayilan/' . $yol . '.php';
 
     if (is_file($aktif_sablon)) {
-        require $aktif_sablon;
+        $bozkurt['render_tema_adi'] = (string) $bozkurt['tema_adi'];
+        try {
+            require $aktif_sablon;
+        } finally {
+            $bozkurt['render_tema_adi'] = null;
+        }
         return;
     }
 
     if (is_file($varsayilan_sablon)) {
-        require $varsayilan_sablon;
+        $bozkurt['render_tema_adi'] = 'varsayilan';
+        try {
+            require $varsayilan_sablon;
+        } finally {
+            $bozkurt['render_tema_adi'] = null;
+        }
         return;
     }
     // ===================== BİTİŞ: TEMA GÖRÜNÜM FALLBACK =====================
@@ -195,12 +215,16 @@ function gorunum_tema($yol, $veriler = [], $tema_adi = 'varsayilan')
     global $bozkurt;
 
     // ===================== BAŞLANGIÇ: TEMA BAZLI GÖRÜNÜM GÜVENLİĞİ =====================
-    $yol = str_replace(['..', "\0", ':'], '', (string) $yol);
-    $tema_adi = str_replace(['..', "\0", ':'], '', tema_adi_cozumle((string) $tema_adi ?: 'varsayilan'));
+    $tema_adi = tema_adi_cozumle((string) $tema_adi ?: 'varsayilan');
 
-    if (!tema_gorunum_girdisi_dogrula($yol) || !preg_match('#^[a-zA-Z0-9_-]+$#', $tema_adi)) {
+    if (tema_gorunum_yasak_icerir($yol) || tema_gorunum_yasak_icerir($tema_adi)) {
         error_log('Gorunum tema güvenlik doğrulaması başarısız.');
-        throw new \App\Exceptions\ViewNotFoundException($yol);
+        throw new \App\Exceptions\ViewNotFoundException((string) $yol);
+    }
+
+    if (!tema_gorunum_girdisi_dogrula((string) $yol) || !preg_match('#^[a-zA-Z0-9_-]+$#', (string) $tema_adi)) {
+        error_log('Gorunum tema regex doğrulaması başarısız.');
+        throw new \App\Exceptions\ViewNotFoundException((string) $yol);
     }
     // ===================== BİTİŞ: TEMA BAZLI GÖRÜNÜM GÜVENLİĞİ =====================
 
@@ -208,12 +232,17 @@ function gorunum_tema($yol, $veriler = [], $tema_adi = 'varsayilan')
         extract($veriler, EXTR_SKIP);
     }
 
-    $meta_title = $veriler['sayfa_basligi'] ?? ayar_getir('site_title', 'V-Commerce');
+    $meta_title = $veriler['sayfa_basligi'] ?? ayar_getir('site_title', 'Bozok E-Ticaret');
     $meta_desc = $veriler['meta_desc'] ?? '';
 
     $sablon = $bozkurt['tema_yolu'] . '/' . $tema_adi . '/' . $yol . '.php';
     if (is_file($sablon)) {
-        require $sablon;
+        $bozkurt['render_tema_adi'] = (string) $tema_adi;
+        try {
+            require $sablon;
+        } finally {
+            $bozkurt['render_tema_adi'] = null;
+        }
         return;
     }
 
@@ -226,10 +255,8 @@ function gorunum_tema($yol, $veriler = [], $tema_adi = 'varsayilan')
  */
 function gorunum_admin($yol, $veriler = [])
 {
-    $yol = str_replace(['..', "\0", ':'], '', (string) $yol);
-
-    if (!preg_match('#^[a-zA-Z0-9_\-/]+$#', $yol)) {
-        throw new \App\Exceptions\ViewNotFoundException($yol);
+    if (tema_gorunum_yasak_icerir($yol) || !preg_match('#^[a-zA-Z0-9_\-/]+$#', (string) $yol)) {
+        throw new \App\Exceptions\ViewNotFoundException((string) $yol);
     }
 
     if (!empty($veriler)) {
@@ -245,7 +272,7 @@ function gorunum_admin($yol, $veriler = [])
     }
 
     error_log('Admin görünüm bulunamadı: ' . $yol);
-    throw new \App\Exceptions\ViewNotFoundException($yol);
+    throw new \App\Exceptions\ViewNotFoundException((string) $yol);
 }
 
 /**
@@ -255,7 +282,8 @@ function tema_linki($dosya = '')
 {
     global $bozkurt;
     $baseUrl = rtrim(BASE_URL, '/');
-    return $baseUrl . '/temalar/' . $bozkurt['tema_adi'] . '/' . ltrim($dosya, '/');
+    $kullanilan_tema = $bozkurt['render_tema_adi'] ?: $bozkurt['tema_adi'];
+    return $baseUrl . '/temalar/' . $kullanilan_tema . '/' . ltrim($dosya, '/');
 }
 
 // ==================== MODÜL & KANCA (HOOK) SİSTEMİ ====================
@@ -389,7 +417,7 @@ function modul_linki($kategori, $kod, $dosya = '')
 function tema_yolu($tema = '', $dosya = '')
 {
     global $bozkurt;
-    $tema = $tema ?: $bozkurt['tema_adi'];
+    $tema = $tema ?: ($bozkurt['render_tema_adi'] ?: $bozkurt['tema_adi']);
     return $bozkurt['tema_yolu'] . '/' . $tema . ($dosya ? '/' . $dosya : '');
 }
 
@@ -456,7 +484,10 @@ function csrf_kod()
 function dogrula_csrf()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+        $istek_token = $_POST['csrf_token'] ?? '';
+        $oturum_token = $_SESSION['csrf_token'] ?? '';
+
+        if (!is_string($istek_token) || !is_string($oturum_token) || !hash_equals($oturum_token, $istek_token)) {
             die("Güvenlik hatası: CSRF doğrulaması başarısız!");
         }
     }
