@@ -52,7 +52,9 @@ if (!class_exists('Database')) {
 }
 
 // Functions dahil et (autoload files'tan yüklenmemişse)
-if (!function_exists('e')) {
+// Not: e() helper'ı app/Helpers altında da tanımlı olabilir.
+// Bu yüzden yalnızca e() kontrolü yeterli değil; $bozkurt ve çekirdek görünüm fonksiyonları da garanti edilmeli.
+if (!isset($bozkurt) || !function_exists('gorunum') || !function_exists('aktif_tema_ayarla')) {
     require_once ROOT_PATH . 'includes' . DIRECTORY_SEPARATOR . 'functions.php';
 }
 

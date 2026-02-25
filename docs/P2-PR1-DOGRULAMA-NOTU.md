@@ -23,18 +23,51 @@
 - `includes/footer.php`
 - `docs/P2-PR1-TEKNIK-TASLAK.md`
 
-## Manuel Smoke Test
-1. Frontend’de sayfayı aç ve çerez banner göründüğünü doğrula.
-2. **Reddet** tıkla:
-   - banner kapanmalı,
-   - analitik/pazarlama çerezleri temizlenmeli,
-   - `bozok_cerez_tercih` içinde `analitik=false`, `pazarlama=false` olmalı.
-3. **Kabul** veya **Tercihi Kaydet** ile yeni seçim yap; çerez değerleri doğru güncellenmeli.
-4. Adminde `/admin/cerez-yonetimi.php` aç:
-   - kabul/reddet/tercih sayıları artıyor mu kontrol et,
-   - son kayıt listesinde IP (maskeli), tarayıcı ve tarih görünüyor mu kontrol et.
-5. Adminden `Tam IP sakla` açıp yeni tercih gönder; yeni satırda tam IP yazıldığını doğrula.
-6. `kayit_saklama_gunu` değerini düşürüp eski kayıtların temizlenmesini doğrula (zamana bağlı).
+## 1) Banner Render Testi (Kritik)
+1. Admin > Temalar ekranından önce `varsayilan`, sonra `svs-tema` temasını aktif et.
+2. Her iki temada da ana sayfayı aç (`/`).
+3. Karar çerezi yokken (`bozok_cerez_tercih` silinmişken) banner görünmeli.
+4. Banner butonları test et:
+   - **Kabul**
+   - **Reddet**
+   - **Tercihi Kaydet**
+5. Karar verildikten sonra sayfa yenile:
+   - banner tekrar görünmemeli,
+   - kararı sıfırlamak için `bozok_cerez_tercih` çerezini temizleyince tekrar görünmeli.
+
+## 2) `/cerez/tercih` Endpoint Testi (Kritik)
+> Test yöntemi: banner formu üzerinden veya doğrudan POST isteği ile.
+
+### 2.a Reddet
+- POST: `aksiyon=reddet`
+- Beklenen:
+  - sadece zorunlu açık,
+  - analitik/pazarlama kapalı,
+  - `_ga`, `_gid`, `_fbp` vb. mümkün olan analitik/pazarlama çerezleri temizlenir.
+
+### 2.b Kabul
+- POST: `aksiyon=kabul`
+- Beklenen:
+  - analitik/pazarlama/tercih açık kaydedilir.
+
+### 2.c Tercih Kaydet
+- POST: `aksiyon=tercih_kaydet` + checkbox değerleri
+- Beklenen:
+  - seçilen kategoriler açık,
+  - seçilmeyenlere göre temizleme tetiklenir.
+
+### DB ve Admin doğrulama
+1. `cerez_izin_kayitlari` tablosunda kayıt oluşmalı (`anonim_id`, `karar`, `created_at` dolu).
+2. `/admin/cerez-yonetimi.php` ekranındaki kabul/reddet/tercih kartları ve son kayıt listesi güncellenmeli.
+
+## 3) “Doğrudan erişim engellendi.” Konusunun Netleştirilmesi
+- Bu metin `moduller/loader.php` içindeki koruma kontrolünden gelir.
+- Kök neden: `config/config.php` içinde `includes/functions.php` dosyası yalnızca `e()` fonksiyonuna bakılarak yükleniyordu; helper’dan `e()` önceden geldiyse `$bozkurt` oluşturulmadan loader çalışabiliyordu.
+- Düzeltme: `config/config.php` içinde `e()` yerine çekirdek gereksinimler (`$bozkurt`, `gorunum()`, `aktif_tema_ayarla()`) kontrol edilerek `includes/functions.php` garantili yüklendi.
+- Sonuç:
+  - “doğrudan dosya erişimi engeli” normal güvenlik mekanizması olarak korunur,
+  - ancak uygulama ana giriş akışı artık yanlışlıkla bu hataya düşmez,
+  - `/cerez/tercih` route’u router üzerinden normal çalışır.
 
 ## Güvenlik Kontrolü
 - Çerez tercih formu CSRF doğrulaması ile korunuyor.
