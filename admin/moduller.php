@@ -5,6 +5,13 @@ requireAdmin();
 $pageTitle = 'Modül Merkezi';
 $adminPage = 'extensions';
 
+// ===================== BAŞLANGIÇ: MODÜL YETKİ KONTROLÜ =====================
+if (class_exists('Auth') && !Auth::can('manage_extensions')) {
+    http_response_code(403);
+    die('Bu işlem için modül yönetim yetkisi gereklidir.');
+}
+// ===================== BİTİŞ: MODÜL YETKİ KONTROLÜ =====================
+
 // ===================== BAŞLANGIÇ: YARDIMCI FONKSİYONLAR =====================
 function modul_kimligi_uret(array $modul): string
 {
@@ -20,18 +27,29 @@ function modul_kimligini_coz(string $kimlik): array
     return [$parcalar[0], $parcalar[1]];
 }
 
+
+function modul_tipi_gecerli_mi(string $tip): bool
+{
+    return in_array($tip, ['module', 'payment', 'shipping', 'marketing'], true);
+}
+
+function modul_kodu_gecerli_mi(string $kod): bool
+{
+    return preg_match('#^[a-zA-Z0-9_-]+$#', $kod) === 1;
+}
+
 function modul_ayar_alani_dogrula(array $alan, $deger)
 {
     $tip = $alan['type'] ?? 'string';
 
     if ($tip === 'bool') {
-        return in_array((string) $deger, ['0', '1'], true) ? (string) $deger : '0';
+        return in_array((string) $deger, ['1', 'true', 'on'], true);
     }
     if ($tip === 'int') {
-        return (string) intval($deger);
+        return intval($deger);
     }
     if ($tip === 'float') {
-        return (string) floatval($deger);
+        return floatval($deger);
     }
     if ($tip === 'json') {
         $cozulmus = json_decode((string) $deger, true);
@@ -57,6 +75,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $tip = trim((string) ($_POST['tip'] ?? 'module'));
         $durum = intval($_POST['durum'] ?? 0) ? 1 : 0;
 
+        if (!modul_tipi_gecerli_mi($tip) || !modul_kodu_gecerli_mi($kod)) {
+            mesaj('moduller', 'Geçersiz modül tipi veya kodu.', 'error');
+            git('/admin/moduller.php?sekme=kurulu');
+        }
+
         Database::query("UPDATE extensions SET status = ? WHERE code = ? AND type = ?", [$durum, $kod, $tip]);
         mesaj('moduller', 'Modül durumu güncellendi.', 'success');
         git('/admin/moduller.php?sekme=kurulu');
@@ -65,6 +88,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($aksiyon === 'kur') {
         $kod = trim((string) ($_POST['kod'] ?? ''));
         $tip = trim((string) ($_POST['tip'] ?? 'module'));
+
+        if (!modul_tipi_gecerli_mi($tip) || !modul_kodu_gecerli_mi($kod)) {
+            mesaj('moduller', 'Geçersiz modül tipi veya kodu.', 'error');
+            git('/admin/moduller.php?sekme=kurulabilir');
+        }
 
         Database::query(
             "INSERT INTO extensions (type, code, status, sort_order) VALUES (?, ?, 0, 0)
@@ -79,6 +107,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($aksiyon === 'ayar_kaydet') {
         $modul_kimligi = trim((string) ($_POST['modul_kimligi'] ?? ''));
         [$tip, $kod] = modul_kimligini_coz($modul_kimligi);
+
+        if (!modul_tipi_gecerli_mi($tip) || !modul_kodu_gecerli_mi($kod)) {
+            mesaj('moduller', 'Ayar kaydı için modül bilgisi geçersiz.', 'error');
+            git('/admin/moduller.php?sekme=ayarlar');
+        }
 
         $kesif = class_exists('ModulSozlesmesi') ? ModulSozlesmesi::modulleriKesfet($bozkurt['modul_yolu']) : [];
         $hedef_modul = null;

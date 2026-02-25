@@ -7,35 +7,39 @@
 class SecenekServisi
 {
     private static $onbellek = [];
-    private static $tablo_hazir = false;
+    private static $tablo_durumu_biliniyor = false;
+    private static $tablo_var = false;
 
-    // ===================== BAŞLANGIÇ: TABLO HAZIRLAMA =====================
-    private static function tabloyuHazirla(): void
+    // ===================== BAŞLANGIÇ: TABLO DURUM KONTROLÜ =====================
+    private static function tabloVarMi(): bool
     {
-        if (self::$tablo_hazir) {
-            return;
+        if (self::$tablo_durumu_biliniyor) {
+            return self::$tablo_var;
+        }
+
+        self::$tablo_durumu_biliniyor = true;
+
+        if (!class_exists('Database')) {
+            error_log('SecenekServisi tablo kontrolü: Database sınıfı bulunamadı.');
+            self::$tablo_var = false;
+            return false;
         }
 
         try {
-            Database::query("CREATE TABLE IF NOT EXISTS `core_options` (
-                `id` INT AUTO_INCREMENT PRIMARY KEY,
-                `grup_anahtari` VARCHAR(120) NOT NULL,
-                `secenek_anahtari` VARCHAR(150) NOT NULL,
-                `deger` LONGTEXT NULL,
-                `deger_tipi` VARCHAR(20) NOT NULL DEFAULT 'string',
-                `autoload` TINYINT(1) NOT NULL DEFAULT 0,
-                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-                UNIQUE KEY `uniq_grup_secenek` (`grup_anahtari`, `secenek_anahtari`),
-                KEY `idx_grup` (`grup_anahtari`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+            $satir = Database::fetch("SHOW TABLES LIKE 'core_options'");
+            self::$tablo_var = !empty($satir);
         } catch (Throwable $hata) {
-            error_log('SecenekServisi tablo hazırlama hatası: ' . $hata->getMessage());
+            error_log('SecenekServisi tablo kontrol hatası: ' . $hata->getMessage());
+            self::$tablo_var = false;
         }
 
-        self::$tablo_hazir = true;
+        if (!self::$tablo_var) {
+            error_log('SecenekServisi: core_options tablosu bulunamadı. Kurulum adımını çalıştırın.');
+        }
+
+        return self::$tablo_var;
     }
-    // ===================== BİTİŞ: TABLO HAZIRLAMA =====================
+    // ===================== BİTİŞ: TABLO DURUM KONTROLÜ =====================
 
     private static function onbellekAnahtari(string $anahtar, string $grup): string
     {
@@ -59,14 +63,21 @@ class SecenekServisi
         return 'string';
     }
 
-    private static function depola($deger, string $tip): string
+    private static function depola($deger, string $tip)
     {
         if ($tip === 'json') {
-            return (string) json_encode($deger, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            $json = json_encode($deger, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            if ($json === false) {
+                error_log('SecenekServisi json encode hatası: ' . json_last_error_msg());
+                return false;
+            }
+            return $json;
         }
+
         if ($tip === 'bool') {
             return $deger ? '1' : '0';
         }
+
         return (string) $deger;
     }
 
@@ -90,7 +101,9 @@ class SecenekServisi
     // ===================== BAŞLANGIÇ: OPTIONS API =====================
     public static function getir(string $anahtar, $varsayilan = null, string $grup = 'genel')
     {
-        self::tabloyuHazirla();
+        if (!self::tabloVarMi()) {
+            return $varsayilan;
+        }
 
         $onbellek_anahtari = self::onbellekAnahtari($anahtar, $grup);
         if (array_key_exists($onbellek_anahtari, self::$onbellek)) {
@@ -118,29 +131,28 @@ class SecenekServisi
 
     public static function yaz(string $anahtar, $deger, string $grup = 'genel', bool $autoload = false): bool
     {
-        self::tabloyuHazirla();
+        if (!self::tabloVarMi()) {
+            return false;
+        }
 
         $tip = self::tipBelirle($deger);
         $db_deger = self::depola($deger, $tip);
 
-        try {
-            $mevcut = Database::fetch(
-                "SELECT id FROM core_options WHERE grup_anahtari = ? AND secenek_anahtari = ? LIMIT 1",
-                [$grup, $anahtar]
-            );
+        if ($db_deger === false && $tip === 'json') {
+            return false;
+        }
 
-            if ($mevcut) {
-                Database::query(
-                    "UPDATE core_options SET deger = ?, deger_tipi = ?, autoload = ? WHERE id = ?",
-                    [$db_deger, $tip, $autoload ? 1 : 0, (int) $mevcut['id']]
-                );
-            } else {
-                Database::query(
-                    "INSERT INTO core_options (grup_anahtari, secenek_anahtari, deger, deger_tipi, autoload)
-                     VALUES (?, ?, ?, ?, ?)",
-                    [$grup, $anahtar, $db_deger, $tip, $autoload ? 1 : 0]
-                );
-            }
+        try {
+            Database::query(
+                "INSERT INTO core_options (grup_anahtari, secenek_anahtari, deger, deger_tipi, autoload)
+                 VALUES (?, ?, ?, ?, ?)
+                 ON DUPLICATE KEY UPDATE
+                    deger = VALUES(deger),
+                    deger_tipi = VALUES(deger_tipi),
+                    autoload = VALUES(autoload),
+                    updated_at = CURRENT_TIMESTAMP",
+                [$grup, $anahtar, (string) $db_deger, $tip, $autoload ? 1 : 0]
+            );
         } catch (Throwable $hata) {
             error_log('SecenekServisi yaz hatası: ' . $hata->getMessage());
             return false;
@@ -152,7 +164,9 @@ class SecenekServisi
 
     public static function sil(string $anahtar, string $grup = 'genel'): bool
     {
-        self::tabloyuHazirla();
+        if (!self::tabloVarMi()) {
+            return false;
+        }
 
         try {
             Database::query(
@@ -170,7 +184,9 @@ class SecenekServisi
 
     public static function varMi(string $anahtar, string $grup = 'genel'): bool
     {
-        self::tabloyuHazirla();
+        if (!self::tabloVarMi()) {
+            return false;
+        }
 
         try {
             $satir = Database::fetch(
@@ -187,7 +203,9 @@ class SecenekServisi
 
     public static function grupGetir(string $grup = 'genel'): array
     {
-        self::tabloyuHazirla();
+        if (!self::tabloVarMi()) {
+            return [];
+        }
 
         try {
             $satirlar = Database::fetchAll(

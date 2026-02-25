@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
             // ========== TABLOLAR ==========
             // ========== TABLOLAR ==========
             $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
-            $pdo->exec("DROP TABLE IF EXISTS `wishlist`, `cart`, `order_items`, `orders`, `addresses`, `products`, `categories`, `users`, `settings`, `xml_imports`, `campaigns`, `campaign_usage`, `sliders`, `price_alerts`, `extensions` ");
+            $pdo->exec("DROP TABLE IF EXISTS `wishlist`, `cart`, `order_items`, `orders`, `addresses`, `products`, `categories`, `users`, `settings`, `xml_imports`, `campaigns`, `campaign_usage`, `sliders`, `price_alerts`, `extensions`, `core_options` ");
             $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
 
             $pdo->exec("CREATE TABLE `users` (
@@ -318,12 +318,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
             // Eklenti ve Tema Takip Tablosu
             $pdo->exec("CREATE TABLE IF NOT EXISTS `extensions` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
-                `type` ENUM('module','theme') NOT NULL,
+                `type` VARCHAR(50) NOT NULL COMMENT 'module, payment, shipping, marketing, theme',
                 `category` VARCHAR(50) DEFAULT 'genel',
                 `code` VARCHAR(100) NOT NULL,
                 `status` TINYINT(1) DEFAULT 1,
                 `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE KEY `type_code` (`type`, `code`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+
+            // Core Options API tablosu
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `core_options` (
+                `id` INT AUTO_INCREMENT PRIMARY KEY,
+                `grup_anahtari` VARCHAR(120) NOT NULL,
+                `secenek_anahtari` VARCHAR(150) NOT NULL,
+                `deger` LONGTEXT DEFAULT NULL,
+                `deger_tipi` VARCHAR(20) NOT NULL DEFAULT 'string',
+                `autoload` TINYINT(1) NOT NULL DEFAULT 0,
+                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+                UNIQUE KEY `uniq_grup_secenek` (`grup_anahtari`, `secenek_anahtari`),
+                KEY `idx_grup` (`grup_anahtari`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
 
             $pdo->exec("CREATE TABLE IF NOT EXISTS `product_attributes` (

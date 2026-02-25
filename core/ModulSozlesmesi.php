@@ -25,6 +25,19 @@ class ModulSozlesmesi
         ];
     }
 
+    public static function schemaTipAliaslari(): array
+    {
+        return [
+            'metin' => 'string',
+            'secim' => 'select',
+        ];
+    }
+
+    public static function schemaIzinliTipler(): array
+    {
+        return ['string', 'bool', 'int', 'float', 'select', 'json'];
+    }
+
     // ===================== BAŞLANGIÇ: MODÜL META OKUMA =====================
     public static function modulMetaOku(string $modul_klasoru, string $kategori, string $kod): array
     {
@@ -75,6 +88,14 @@ class ModulSozlesmesi
         $meta = array_merge($meta, $cozulmus);
         $meta['metadata_kaynagi'] = 'module.json';
 
+        $schema_sonuc = self::schemaDogrulaVeNormalizeEt($meta['settings_schema'] ?? []);
+        $meta['settings_schema'] = $schema_sonuc['schema'];
+        $uyarilar = array_merge($uyarilar, $schema_sonuc['uyarilar']);
+
+        $entry_sonuc = self::entryDogrula($modul_klasoru, (string) ($meta['entry'] ?? 'init.php'));
+        $meta['entry'] = $entry_sonuc['entry'];
+        $uyarilar = array_merge($uyarilar, $entry_sonuc['uyarilar']);
+
         $dogrulama = self::metaDogrula($meta, $kategori, $kod);
         $uyarilar = array_merge($uyarilar, $dogrulama['uyarilar']);
 
@@ -83,10 +104,88 @@ class ModulSozlesmesi
         return [
             'meta' => $meta,
             'uyarilar' => $uyarilar,
-            'gecerli' => $dogrulama['gecerli'],
+            'gecerli' => $dogrulama['gecerli'] && $schema_sonuc['gecerli'] && $entry_sonuc['gecerli'],
         ];
     }
     // ===================== BİTİŞ: MODÜL META OKUMA =====================
+
+    private static function schemaDogrulaVeNormalizeEt($schema): array
+    {
+        $uyarilar = [];
+        $gecerli = true;
+
+        if (!is_array($schema)) {
+            return ['schema' => [], 'uyarilar' => ['settings_schema bir dizi olmalı.'], 'gecerli' => false];
+        }
+
+        $aliaslar = self::schemaTipAliaslari();
+        $izinli = self::schemaIzinliTipler();
+        $normal = [];
+
+        foreach ($schema as $indeks => $alan) {
+            if (!is_array($alan)) {
+                $uyarilar[] = "settings_schema[$indeks] geçersiz formatta.";
+                $gecerli = false;
+                continue;
+            }
+
+            $anahtar = trim((string) ($alan['key'] ?? ''));
+            $tip = strtolower(trim((string) ($alan['type'] ?? '')));
+            if (isset($aliaslar[$tip])) {
+                $tip = $aliaslar[$tip];
+            }
+
+            if ($anahtar === '' || $tip === '') {
+                $uyarilar[] = "settings_schema[$indeks] için key/type zorunlu.";
+                $gecerli = false;
+                continue;
+            }
+
+            if (!in_array($tip, $izinli, true)) {
+                $uyarilar[] = "settings_schema[$indeks] type geçersiz: {$tip}";
+                $gecerli = false;
+                continue;
+            }
+
+            $alan['type'] = $tip;
+            if ($tip === 'select') {
+                if (!isset($alan['choices']) || !is_array($alan['choices'])) {
+                    $uyarilar[] = "settings_schema[$indeks] select türü için choices zorunlu.";
+                    $gecerli = false;
+                    continue;
+                }
+            }
+
+            $normal[] = $alan;
+        }
+
+        return ['schema' => $normal, 'uyarilar' => $uyarilar, 'gecerli' => $gecerli];
+    }
+
+    private static function entryDogrula(string $modul_klasoru, string $entry): array
+    {
+        $uyarilar = [];
+        $gecerli = true;
+        $entry = trim($entry);
+
+        if ($entry === '') {
+            $entry = 'init.php';
+        }
+
+        if (preg_match('#^[a-zA-Z0-9_./-]+$#', $entry) !== 1 || strpos($entry, '..') !== false) {
+            $uyarilar[] = 'entry alanı güvenli değil, init.php olarak düzeltildi.';
+            return ['entry' => 'init.php', 'uyarilar' => $uyarilar, 'gecerli' => false];
+        }
+
+        $modul_koku = realpath($modul_klasoru);
+        $hedef = realpath($modul_klasoru . DIRECTORY_SEPARATOR . $entry);
+        if ($modul_koku === false || $hedef === false || strpos($hedef, $modul_koku) !== 0) {
+            $uyarilar[] = 'entry modül klasörü dışına çıkıyor veya dosya bulunamadı.';
+            return ['entry' => 'init.php', 'uyarilar' => $uyarilar, 'gecerli' => false];
+        }
+
+        return ['entry' => str_replace('\\', '/', ltrim(str_replace($modul_koku, '', $hedef), '/\\')), 'uyarilar' => $uyarilar, 'gecerli' => $gecerli];
+    }
 
     public static function metaDogrula(array $meta, string $kategori, string $kod): array
     {
@@ -111,24 +210,9 @@ class ModulSozlesmesi
             $gecerli = false;
         }
 
-        if (!empty($meta['settings_schema']) && !is_array($meta['settings_schema'])) {
+        if (!is_array($meta['settings_schema'] ?? [])) {
             $uyarilar[] = 'settings_schema bir dizi olmalı.';
             $gecerli = false;
-        }
-
-        if (is_array($meta['settings_schema'] ?? null)) {
-            foreach ($meta['settings_schema'] as $indeks => $alan) {
-                if (!is_array($alan)) {
-                    $uyarilar[] = "settings_schema[$indeks] geçersiz formatta.";
-                    $gecerli = false;
-                    continue;
-                }
-
-                if (empty($alan['key']) || empty($alan['type'])) {
-                    $uyarilar[] = "settings_schema[$indeks] için key/type zorunlu.";
-                    $gecerli = false;
-                }
-            }
         }
 
         return ['gecerli' => $gecerli, 'uyarilar' => $uyarilar];
