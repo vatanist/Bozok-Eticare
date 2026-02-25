@@ -15,7 +15,7 @@
  * Ürün, sepet, auth, medya fonksiyonları → app/Helpers/ altına taşındı.
  * Bootstrap/app.php tarafından otomatik yüklenir.
  *
- * @package VCommerce
+ * @package BozokETicaret
  * @version 2.0.0
  */
 
@@ -181,27 +181,29 @@ function gorunum($yol, $veriler = [])
     $varsayilan_sablon = $bozkurt['tema_yolu'] . '/varsayilan/' . $yol . '.php';
 
     if (is_file($aktif_sablon)) {
+        $onceki_render_tema = $bozkurt['render_tema_adi'] ?? null;
         $bozkurt['render_tema_adi'] = (string) $bozkurt['tema_adi'];
         try {
             require $aktif_sablon;
         } finally {
-            $bozkurt['render_tema_adi'] = null;
+            $bozkurt['render_tema_adi'] = $onceki_render_tema;
         }
         return;
     }
 
     if (is_file($varsayilan_sablon)) {
+        $onceki_render_tema = $bozkurt['render_tema_adi'] ?? null;
         $bozkurt['render_tema_adi'] = 'varsayilan';
         try {
             require $varsayilan_sablon;
         } finally {
-            $bozkurt['render_tema_adi'] = null;
+            $bozkurt['render_tema_adi'] = $onceki_render_tema;
         }
         return;
     }
     // ===================== BİTİŞ: TEMA GÖRÜNÜM FALLBACK =====================
 
-    throw new \App\Exceptions\ViewNotFoundException($yol);
+    throw new \App\Exceptions\ViewNotFoundException((string) $yol);
 }
 
 /**
@@ -237,17 +239,18 @@ function gorunum_tema($yol, $veriler = [], $tema_adi = 'varsayilan')
 
     $sablon = $bozkurt['tema_yolu'] . '/' . $tema_adi . '/' . $yol . '.php';
     if (is_file($sablon)) {
+        $onceki_render_tema = $bozkurt['render_tema_adi'] ?? null;
         $bozkurt['render_tema_adi'] = (string) $tema_adi;
         try {
             require $sablon;
         } finally {
-            $bozkurt['render_tema_adi'] = null;
+            $bozkurt['render_tema_adi'] = $onceki_render_tema;
         }
         return;
     }
 
     error_log('Gorunum tema bulunamadı: ' . $tema_adi . '/' . $yol);
-    throw new \App\Exceptions\ViewNotFoundException($yol);
+    throw new \App\Exceptions\ViewNotFoundException((string) $yol);
 }
 
 /**

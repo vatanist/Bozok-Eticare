@@ -42,7 +42,7 @@ if (is_dir($tema_yolu)) {
             'dogrulama_hatalari' => $dogrulama['hatalar'] ?? [],
             'dogrulama_uyarilari' => $dogrulama['uyarilar'] ?? [],
             'gecerli' => $dogrulama['gecerli'] ?? false,
-            'screenshot' => file_exists($tema_klasoru . '/screenshot.png') ? BASE_URL . '/temalar/' . $t_kod . '/screenshot.png' : BASE_URL . '/assets/images/no-theme.png',
+            'screenshot' => file_exists($tema_klasoru . '/screenshot.png') ? BASE_URL . '/temalar/' . $t_kod . '/screenshot.png' : BASE_URL . '/assets/images/no-theme.svg',
             'active' => ($aktif_tema == $t_kod)
         ];
     }

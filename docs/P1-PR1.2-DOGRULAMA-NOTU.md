@@ -33,3 +33,15 @@
 - SSH/composer bağımlılığı eklenmedi.
 - `vendor` FTP yaklaşımına aykırı tasarım eklenmedi.
 - Yollar proje kök/public_html içinde kaldı; `open_basedir` ile uyumlu.
+
+
+## P1-PR1.2.3 Mini Hotfix Notu
+
+- `render_tema_adi` stack-safe hale getirildi: iç içe `gorunum()` çağrılarında önceki render bağlamı korunuyor.
+- Admin asset 404 düzeltildi: `assets/css/admin.css` ve `assets/images/no-theme.svg` eklendi.
+- `admin/themes.php` placeholder yolu `no-theme.svg` olarak güncellendi.
+
+### Ek Manuel Kontroller
+1. İç içe görünüm çağrısı testinde `tema_linki()` çıktı teması çağrı bağlamında doğru kalır.
+2. Admin temalar/eklentiler ekranında CSS dosyası 200 döner.
+3. Screenshot olmayan tema kartı placeholder görselini gösterir.
