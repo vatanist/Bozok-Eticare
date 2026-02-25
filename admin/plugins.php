@@ -49,4 +49,4 @@ $veriler = [
 ];
 
 // Admin şablonunu çağır (Öneri: admin/gorunum fonksiyonu da olmalı ama şimdilik doğrudan)
-gorunum('admin-eklentiler', $veriler);
+gorunum_tema('admin-eklentiler', $veriler, 'varsayilan');

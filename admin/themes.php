@@ -53,4 +53,4 @@ $veriler = [
     'temalar' => $tum_temalar
 ];
 
-gorunum('admin-temalar', $veriler);
+gorunum_tema('admin-temalar', $veriler, 'varsayilan');

@@ -151,6 +151,42 @@ function gorunum($yol, $veriler = [])
 /**
  * Tema Dosyalarının (CSS/JS) Linkini Verir
  */
+
+
+/**
+ * Belirtilen tema klasöründen görünüm yükler.
+ * Örn: gorunum_tema('admin-temalar', $veriler, 'varsayilan')
+ *
+ * Güvenlik: Path traversal koruması (.., \0 engeli)
+ *
+ * @throws \App\Exceptions\ViewNotFoundException
+ */
+function gorunum_tema($yol, $veriler = [], $tema_adi = 'varsayilan')
+{
+    global $bozkurt;
+
+    // ===================== BAŞLANGIÇ: TEMA GÖRÜNÜM ÇÖZÜMLEME =====================
+    $yol = str_replace(['..', "\0"], '', (string) $yol);
+    $tema_adi = tema_adi_cozumle((string) $tema_adi ?: 'varsayilan');
+
+    if (!empty($veriler)) {
+        extract($veriler);
+    }
+
+    $meta_title = $veriler['sayfa_basligi'] ?? ayar_getir('site_title', 'V-Commerce');
+    $meta_desc = $veriler['meta_desc'] ?? '';
+
+    $sablon = $bozkurt['tema_yolu'] . '/' . $tema_adi . '/' . $yol . '.php';
+    // ===================== BİTİŞ: TEMA GÖRÜNÜM ÇÖZÜMLEME =====================
+
+    if (file_exists($sablon)) {
+        require $sablon;
+        return;
+    }
+
+    throw new \App\Exceptions\ViewNotFoundException($yol);
+}
+
 function tema_linki($dosya = '')
 {
     global $bozkurt;
