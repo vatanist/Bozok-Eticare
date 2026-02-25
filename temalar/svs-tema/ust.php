@@ -8,6 +8,13 @@
         <?= isset($sayfa_basligi) ? $sayfa_basligi . ' - ' : '' ?>Bozok E-Ticaret Svs Tema
     </title>
 
+    <?php if (!empty($meta_desc)): ?>
+        <meta name="description" content="<?= temiz($meta_desc) ?>">
+    <?php endif; ?>
+    <?php if (!empty($canonical_url)): ?>
+        <link rel="canonical" href="<?= temiz($canonical_url) ?>">
+    <?php endif; ?>
+
     <!-- Shoptimizer CSS Assets -->
     <link rel="stylesheet" href="<?= tema_linki('style.css') ?>">
     <link rel="stylesheet" href="<?= tema_linki('assets/css/main/main.css') ?>">

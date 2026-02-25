@@ -66,7 +66,7 @@ $adminUser = currentUser();
                                         class="fas fa-images"></i> Slider (Manşet)</a>
 
                         <span class="admin-nav-section">İçerik</span>
-                        <a href="<?= BASE_URL ?>/admin/sayfalar.php"
+                        <a href="<?= BASE_URL ?>/admin/cms-sayfalar.php"
                                 class="<?= ($adminPage ?? '') === 'pages' ? 'active' : '' ?>"><i
                                         class="fas fa-file-alt"></i> Bilgi Sayfaları</a>
 

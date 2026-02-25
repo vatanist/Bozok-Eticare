@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= temiz($sayfa_basligi ?? 'V-Commerce - Premium E-Ticaret') ?></title>
 
+    <?php if (!empty($meta_desc)): ?>
+        <meta name="description" content="<?= temiz($meta_desc) ?>">
+    <?php endif; ?>
+    <?php if (!empty($canonical_url)): ?>
+        <link rel="canonical" href="<?= temiz($canonical_url) ?>">
+    <?php endif; ?>
+
     <?php hook_calistir('head_basi'); ?>
 
     <!-- Tasarım ve İkonlar -->

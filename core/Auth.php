@@ -69,7 +69,8 @@ class Auth
             ['Sipariş Yönetimi', 'manage_orders'],
             ['Müşteri Yönetimi', 'manage_customers'],
             ['Ayarları Düzenle', 'manage_settings'],
-            ['Modül Yönetimi', 'manage_extensions']
+            ['Modül Yönetimi', 'manage_extensions'],
+            ['CMS Sayfa Yönetimi', 'manage_cms']
         ];
 
         foreach ($perms as $p) {

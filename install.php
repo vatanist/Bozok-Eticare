@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
             // ========== TABLOLAR ==========
             // ========== TABLOLAR ==========
             $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
-            $pdo->exec("DROP TABLE IF EXISTS `wishlist`, `cart`, `order_items`, `orders`, `addresses`, `products`, `categories`, `users`, `settings`, `xml_imports`, `campaigns`, `campaign_usage`, `sliders`, `price_alerts`, `extensions`, `core_options` ");
+            $pdo->exec("DROP TABLE IF EXISTS `wishlist`, `cart`, `order_items`, `orders`, `addresses`, `products`, `categories`, `users`, `settings`, `xml_imports`, `campaigns`, `campaign_usage`, `sliders`, `price_alerts`, `extensions`, `core_options`, `cms_page_revisions`, `cms_pages` ");
             $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
 
             $pdo->exec("CREATE TABLE `users` (
@@ -338,6 +338,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
                 `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
                 UNIQUE KEY `uniq_grup_secenek` (`grup_anahtari`, `secenek_anahtari`),
                 KEY `idx_grup` (`grup_anahtari`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+
+            // Kurumsal CMS tabloları
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `cms_pages` (
+                `id` INT AUTO_INCREMENT PRIMARY KEY,
+                `title` VARCHAR(255) NOT NULL,
+                `slug` VARCHAR(280) NOT NULL,
+                `icerik` LONGTEXT DEFAULT NULL,
+                `meta_title` VARCHAR(255) DEFAULT NULL,
+                `meta_description` VARCHAR(500) DEFAULT NULL,
+                `canonical_url` VARCHAR(500) DEFAULT NULL,
+                `sablon` VARCHAR(120) NOT NULL DEFAULT 'sayfa',
+                `durum` ENUM('taslak','yayinda') NOT NULL DEFAULT 'taslak',
+                `siralama` INT NOT NULL DEFAULT 0,
+                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+                UNIQUE KEY `uniq_slug` (`slug`),
+                KEY `idx_durum_siralama` (`durum`, `siralama`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `cms_page_revisions` (
+                `id` INT AUTO_INCREMENT PRIMARY KEY,
+                `page_id` INT NOT NULL,
+                `icerik` LONGTEXT DEFAULT NULL,
+                `duzenleyen_user_id` INT DEFAULT NULL,
+                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                KEY `idx_page_id` (`page_id`),
+                CONSTRAINT `fk_cms_rev_page` FOREIGN KEY (`page_id`) REFERENCES `cms_pages`(`id`) ON DELETE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
 
             $pdo->exec("CREATE TABLE IF NOT EXISTS `product_attributes` (

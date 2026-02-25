@@ -201,6 +201,34 @@ try {
         KEY `idx_grup` (`grup_anahtari`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
 
+    // Kurumsal CMS tabloları
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `cms_pages` (
+        `id` INT AUTO_INCREMENT PRIMARY KEY,
+        `title` VARCHAR(255) NOT NULL,
+        `slug` VARCHAR(280) NOT NULL,
+        `icerik` LONGTEXT DEFAULT NULL,
+        `meta_title` VARCHAR(255) DEFAULT NULL,
+        `meta_description` VARCHAR(500) DEFAULT NULL,
+        `canonical_url` VARCHAR(500) DEFAULT NULL,
+        `sablon` VARCHAR(120) NOT NULL DEFAULT 'sayfa',
+        `durum` ENUM('taslak','yayinda') NOT NULL DEFAULT 'taslak',
+        `siralama` INT NOT NULL DEFAULT 0,
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY `uniq_slug` (`slug`),
+        KEY `idx_durum_siralama` (`durum`, `siralama`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `cms_page_revisions` (
+        `id` INT AUTO_INCREMENT PRIMARY KEY,
+        `page_id` INT NOT NULL,
+        `icerik` LONGTEXT DEFAULT NULL,
+        `duzenleyen_user_id` INT DEFAULT NULL,
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        KEY `idx_page_id` (`page_id`),
+        CONSTRAINT `fk_setup_cms_rev_page` FOREIGN KEY (`page_id`) REFERENCES `cms_pages`(`id`) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+
     // XML Imports Log
     $pdo->exec("CREATE TABLE IF NOT EXISTS `xml_imports` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
