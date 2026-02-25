@@ -1,6 +1,6 @@
 {
     "name": "vcommerce/eticaret",
-    "description": "V-Commerce Enterprise E-Ticaret Platformu",
+    "description": "Bozok E-Ticaret CMS tabanlı modüler e-ticaret platformu",
     "type": "project",
     "license": "proprietary",
     "version": "2.0.0",

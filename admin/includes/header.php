@@ -11,7 +11,7 @@ $adminUser = currentUser();
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>
-                <?= isset($pageTitle) ? e($pageTitle) . ' - ' : '' ?>Admin | V-Commerce
+                <?= isset($pageTitle) ? e($pageTitle) . ' - ' : '' ?>Admin | Bozok E-Ticaret
         </title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@ $adminUser = currentUser();
 <body>
         <aside class="admin-sidebar">
                 <div class="admin-logo">
-                        <div class="icon">V</div> V-Commerce
+                        <div class="icon">B</div> Bozok E-Ticaret
                 </div>
                 <nav class="admin-nav">
                         <span class="admin-nav-section">E-Ticaret</span>

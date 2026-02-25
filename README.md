@@ -1,318 +1,77 @@
 <p align="center">
   <img src="https://img.shields.io/badge/PHP-8.x-777BB4?style=for-the-badge&logo=php&logoColor=white" />
   <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white" />
-  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Version-2.0.6-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Hosting-DirectAdmin%20%2B%20MultiPHP-0ea5e9?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Version-2.1.0-blue?style=for-the-badge" />
 </p>
 
-<h1 align="center">🛒 V-Commerce</h1>
+<h1 align="center">🛒 Bozok E-Ticaret</h1>
 <p align="center">
-  <b>Modern, Hızlı ve Güvenli E-Ticaret Platformu</b><br/>
-  <sub>PHP & MySQL ile geliştirilmiş, tam özellikli açık kaynak e-ticaret çözümü</sub>
-</p>
-
-<p align="center">
-  <a href="#-özellikler">Özellikler</a> •
-  <a href="#-kurulum">Kurulum</a> •
-  <a href="#-ekran-görüntüleri">Ekran Görüntüleri</a> •
-  <a href="#-teknolojiler">Teknolojiler</a> •
-  <a href="#-changelog">Changelog</a>
+  <b>CMS uyumlu, modüler ve shared-hosting dostu e-ticaret altyapısı</b><br/>
+  <sub>OpenCart / PrestaShop / WooCommerce benzeri tema-modül yaklaşımıyla geliştirilen PHP + MySQL çözümü</sub>
 </p>
 
 ---
 
-## ✨ Özellikler
+## 🎯 Güncel Durum (P0 – P1 – P3)
 
-### 🏪 Mağaza (Frontend)
-| Özellik | Açıklama |
-|---------|----------|
-| 🏠 **Modern Anasayfa** | Hero slider, kategori kartları, öne çıkan ürünler |
-| 📦 **Ürün Detay** | Yapışkan galeri, zoom efekti, sekmeli açıklama, benzer ürünler |
-| 🔍 **Arama & Filtreleme** | Kategori, marka ve fiyat aralığına göre filtreleme |
-| 🛒 **Sepet Sistemi** | Miktar güncelleme, KDV hesaplama, kargo ücreti |
-| 💳 **Ödeme** | Kapıda ödeme, havale/EFT, PayTR entegrasyonu (hazır) |
-| 🎯 **Kampanya Sistemi** | % indirim, hediye çeki, indirim kodu, müşteriye özel |
-| 🏠 **Adrese Teslim** | Şehir bazı gün içi teslimat seçeneği |
-| 📍 **Akıllı Adres** | İl/İlçe cascading dropdown, 81 il desteği |
-| 🔔 **Fiyat Uyarısı** | Fiyat düşünce haber ver, takip paneli |
-| 👤 **Müşteri Paneli** | Siparişler, adresler, profil yönetimi |
-| 📱 **Responsive Tasarım** | Tüm cihazlarda mükemmel görünüm |
+### ✅ P0 Stabilizasyonu
+- Router sözleşmesiyle uyumlu `handle()/calistir()` ara katman yapısı
+- Tema keşfi (`theme.json` / `style.css`) ve aktif tema çözümleme iyileştirmeleri
+- Admin görünüm kırılmalarına karşı fail-open/fallback düzenlemeleri
+- Modül loader’da `module/payment/shipping/marketing` tip desteği
+- PayTR callback/success/fail güvenlik sertleştirmeleri
 
-### 🔧 Admin Paneli
-| Özellik | Açıklama |
-|---------|----------|
-| 📊 **Dashboard** | Satış istatistikleri, günlük özet |
-| 📋 **Ürün Yönetimi** | CRUD, toplu düzenleme |
-| 📂 **Kategori Yönetimi** | Hiyerarşik alt kategori desteği |
-| 📥 **XML Import** | URL/dosya import, çoklu format desteği |
-| 💱 **Döviz Kuru** | TCMB entegrasyonu, otomatik USD/EUR → TRY çevirisi |
-| 📈 **%20 Kâr Marjı** | XML fiyatlarına otomatik eklenen kâr oranı |
-| 👥 **Müşteri Yönetimi** | Sipariş, harcama, arama, ciro istatistikleri |
-| 🛡️ **Yönetici Yönetimi** | Admin kullanıcılar, yeni yönetici ekleme |
-| 📦 **Sipariş Yönetimi** | Durum takibi, detay görüntüleme |
-| 🎯 **Kampanya Yönetimi** | 4 tür kampanya, kupon kodu, kullanım takibi |
-| 🚚 **Adrese Teslim Ayarları** | Şehir/ilçe bazlı, ek ücret, aktif/pasif |
-| 🖼️ **Slider Yönetimi** | Hero slider, promosyon kartları |
+### ✅ P1 Altyapı
+- Tema/kanca sözleşmesi tek merkezde (`TemaSozlesmesi`)
+- Admin UI’nin temadan bağımsızlaştırılması (`gorunum_admin`)
+- Modül sözleşmesi (`module.json`) ve doğrulama katmanı (`ModulSozlesmesi`)
+- Options API (`SecenekServisi` + `option_*` fonksiyonları)
+- Tek merkez modül yönetimi (`admin/moduller.php`)
 
-### 💰 Fiyatlandırma Sistemi
-```
-XML Fiyatı (USD) × TCMB Kuru × 1.20 (Kâr Marjı) = Satış Fiyatı (TL)
-Sepet: Ara Toplam + %20 KDV + Kargo = Genel Toplam
-```
+### ✅ P3 Kurumsal CMS (Minimum Çalışır Sürüm)
+- `cms_pages` + `cms_page_revisions` veri modeli
+- Admin CRUD ekranları (liste, form, sil, önizleme)
+- Frontend `GET /sayfa/{slug}` ve yalnız yayındaki sayfaların gösterimi
+- Sitemap’e yayındaki CMS sayfalarının otomatik eklenmesi
+- Meta description + canonical alanlarının tema üstünde çalışması
 
 ---
 
-## 🚀 Kurulum
+## 🚀 Kurulum (DirectAdmin + MultiPHP)
 
 ### Gereksinimler
 - PHP 8.0+
 - MySQL 8.0+ / MariaDB 10.5+
-- Apache (mod_rewrite)
+- Apache/LiteSpeed (`.htaccess` açık)
+- Shared hosting uyumlu dosya izinleri
 
 ### Adımlar
+1. Projeyi `public_html` altına yükleyin (FTP / Dosya Yöneticisi).
+2. `.env.example` dosyasını `.env` olarak kopyalayın ve DB bilgilerini girin.
+3. Tarayıcıdan `https://alanadiniz.com/install.php` çalıştırın.
+4. Kurulum bitince güvenlik için `install.php` ve `setup.php` dosyalarını kaldırın.
 
-```bash
-# 1. Projeyi klonlayın
-git clone https://github.com/Sem-h/E-Commerce.git
-
-# 2. Dosyaları sunucuya yükleyin (FTP veya dosya yöneticisi)
-
-# 3. Kurulum sihirbazını başlatın
-# Tarayıcıda: https://siteadresiniz.com/install.php
-```
-
-Kurulum sihirbazı sizi 3 adımda yönlendirecektir:
-
-1. **Sistem Kontrolü** — PHP sürümü, gerekli eklentiler ve dizin izinleri kontrol edilir
-2. **Veritabanı & Admin** — MySQL bilgileri, yönetici hesabı ve site adı belirlenir
-3. **Tamamlandı** — Kurulum biter, admin paneline yönlendirilirsiniz
-
-> ⚠️ Kurulum sonrası güvenlik için `install.php` ve `setup.php` dosyalarını silmeniz önerilir.
+> Not: SSH/composer zorunlu değildir. `vendor` klasörü FTP ile taşınabilir.
 
 ---
 
-## 🏗️ Proje Yapısı
-
-```
-E-Ticaret/
-├── admin/                  # Admin paneli
-│   ├── includes/           # Admin header, footer, sidebar
-│   ├── index.php           # Dashboard
-│   ├── products.php        # Ürün yönetimi
-│   ├── categories.php      # Kategori yönetimi
-│   ├── orders.php          # Sipariş yönetimi
-│   ├── customers.php       # Müşteri yönetimi
-│   ├── users.php           # Yönetici yönetimi
-│   ├── campaigns.php       # Kampanya yönetimi
-│   ├── delivery-settings.php # Adrese teslim ayarları
-│   ├── sliders.php         # Slider yönetimi
-│   └── xml-import.php      # XML import (TCMB kuru)
-├── ajax/                   # AJAX endpointleri
-│   ├── cart.php             # Sepet işlemleri
-│   └── wishlist.php         # Favori işlemleri
-├── assets/
-│   ├── css/                # Stylesheet'ler
-│   │   ├── style.css       # Ana tema
-│   │   ├── components.css  # Bileşen stilleri
-│   │   ├── layout.css      # Layout stilleri
-│   │   └── admin.css       # Admin panel stili
-│   ├── js/                 # JavaScript dosyaları
-│   └── uploads/            # Yüklenen dosyalar
-├── client/                 # Müşteri paneli
-│   ├── includes/           # Panel sidebar
-│   ├── orders.php          # Siparişlerim
-│   ├── addresses.php       # Adreslerim
-│   └── profile.php         # Profil ayarları
-├── config/
-│   ├── config.php          # Ana konfigürasyon
-│   └── db.php              # Veritabanı bağlantısı
-├── includes/
-│   ├── header.php          # Site header
-│   ├── footer.php          # Site footer
-│   ├── functions.php       # Yardımcı fonksiyonlar
-│   └── product-card.php    # Ürün kartı bileşeni
-├── index.php               # Anasayfa
-├── products.php            # Ürün listesi
-├── product-detail.php      # Ürün detay sayfası
-├── cart.php                # Sepet
-├── checkout.php            # Sipariş tamamlama
-├── search.php              # Arama
-└── setup.php               # Kurulum sihirbazı
-```
+## 🧩 Modül ve Tema Mantığı
+- Tema metadata: `theme.json` veya `style.css`
+- Modül metadata: `module.json`
+- Admin modül merkezi: `/admin/moduller.php`
+- Kurumsal CMS yönetimi: `/admin/cms-sayfalar.php`
 
 ---
 
-## 🛠️ Teknolojiler
-
-<table>
-<tr>
-<td align="center"><b>Backend</b></td>
-<td align="center"><b>Frontend</b></td>
-<td align="center"><b>Veritabanı</b></td>
-<td align="center"><b>Entegrasyon</b></td>
-</tr>
-<tr>
-<td>PHP 8.x</td>
-<td>HTML5 / CSS3</td>
-<td>MySQL 8.0</td>
-<td>TCMB XML API</td>
-</tr>
-<tr>
-<td>PDO</td>
-<td>Vanilla JS</td>
-<td>PDO Prepared</td>
-<td>PayTR (hazır)</td>
-</tr>
-<tr>
-<td>Session Auth</td>
-<td>Font Awesome 6</td>
-<td>Foreign Keys</td>
-<td>XML Import</td>
-</tr>
-</table>
+## 📚 Dokümantasyon
+- `docs/P0-DOGRULAMA-NOTU.md`
+- `docs/P1-PR1-DOGRULAMA-NOTU.md`
+- `docs/P1-PR2-DOGRULAMA-NOTU.md`
+- `docs/P1-PR3-DOGRULAMA-NOTU.md`
+- `docs/P1-GECIS-PLANI.md`
 
 ---
 
-## 📋 Changelog
-
-### v2.0.0 — 18 Şubat 2026
-> 🎯 **Büyük Güncelleme — Fiyatlandırma & Tasarım**
-
-#### 💱 Döviz & Fiyatlandırma
-- ✅ TCMB'den canlı USD/EUR kuru çekme (5dk cache)
-- ✅ XML import'ta otomatik kur çevirisi (USD → TRY)
-- ✅ %20 kâr marjı otomatik ekleme
-- ✅ Sepette %20 KDV hesaplama
-- ✅ Fiyat para birimi seçimi (TRY / USD / EUR)
-
-#### 🎨 Ürün Detay Sayfası Yeniden Tasarım
-- ✅ Yapışkan galeri + hover zoom efekti
-- ✅ Gradient fiyat kutusu + tasarruf gösterimi
-- ✅ Marka rozeti (tıklanabilir)
-- ✅ Modern miktar seçici + favori butonu
-- ✅ Güvence kartları (Ücretsiz Kargo, Güvenli Ödeme, Kolay İade)
-- ✅ Sekmeli açıklama (Ürün Açıklaması / Teknik Özellikler)
-- ✅ HTML tablo formatı (zebra-stripe)
-
-#### 🔤 Encoding Düzeltmeleri
-- ✅ HTML entity decode (ürün adları & açıklamalar)
-- ✅ 232 ürün adı + 1429 kısa açıklama düzeltildi
-- ✅ Import script'te otomatik decode
-
----
-
-### v2.0.6 — 19 Şubat 2026
-> 🔧 **Kurulum Sistemi İyileştirme**
-
-#### 🛠️ Install Wizard Güncelleme
-- ✅ Eksik 4 tablo eklendi: `campaigns`, `campaign_usage`, `sliders`, `price_alerts`
-- ✅ Eksik 6 kolon eklendi: `discount_amount`, `campaign_id`, `home_delivery`, `delivery_fee`, `shipping_neighborhood`, `neighborhood`
-- ✅ Yeni kurulumda tüm özellikler tek seferde hazır
-
-#### 🔒 Güvenlik
-- ✅ `setup.php`'den kişisel bilgiler temizlendi
-- ✅ `config/db.php` ve `config/.installed` gitignore'a eklendi
-- ✅ Hassas veriler artık GitHub'a gönderilmiyor
-
----
-
-### v2.0.5 — 19 Şubat 2026
-> 🚀 **Kurulum Sihirbazı**
-
-- ✅ 3 adımlı kurulum sihirbazı (`install.php`)
-- ✅ Sistem gereksinim kontrolü (PHP, PDO, dizin izinleri)
-- ✅ Veritabanı + admin hesabı + site ayarları formu
-- ✅ `config/db.php` otomatik oluşturma
-- ✅ Kurulum kilit dosyası (yeniden çalışma koruması)
-- ✅ README güncelleme (siteadresiniz.com formatı)
-
----
-
-### v2.0.4 — 19 Şubat 2026
-> 🛠️ **Admin Panel İyileştirmeleri**
-
-#### 📊 Admin Sidebar Reorganizasyonu
-- ✅ E-ticaret odaklı menü sıralaması (Dashboard → Siparişler → Ürünler → Kategoriler → Müşteriler)
-- ✅ 3 mantıksal grup: E-Ticaret, Pazarlama, Ayarlar
-
-#### 👥 Müşteri & Yönetici Ayrımı
-- ✅ `customers.php`: Müşteri listesi (sipariş sayısı, toplam harcama, ciro, arama)
-- ✅ `users.php`: Sadece admin kullanıcılar + yeni yönetici ekleme modalı
-- ✅ İstatistik kartları (toplam müşteri, aktif, sipariş veren, toplam ciro)
-
----
-
-### v2.0.3 — 18 Şubat 2026
-> 🔔 **Fiyat Uyarısı & İyileştirmeler**
-
-#### 🔔 Fiyat Düşünce Haber Ver
-- ✅ Ürün detayda "🔔 Fiyat Düşünce Haber Ver" butonu
-- ✅ Ürün kartında 🔔 ikon (hover overlay)
-- ✅ AJAX toggle (ekle/kaldır)
-- ✅ Client panel: Fiyat Uyarılarım sayfası
-- ✅ Kayıt fiyatı vs güncel fiyat karşılaştırması
-- ✅ Fiyat düştüğünde yeşil badge + "Satın Al" butonu
-
-#### 📍 Adres İyileştirmeleri
-- ✅ Mahalle/Cadde alanı eklendi
-- ✅ İl/İlçe cascading dropdown (81 il)
-- ✅ Adrese teslim seçildiğinde kargo satırı "Adrese Teslim" olarak değişiyor
-
----
-
-### v2.0.2 — 18 Şubat 2026
-> 🎯 **Kampanya Modülü, Akıllı Adres & Adrese Teslim**
-
-#### 🎯 Kampanya Sistemi
-- ✅ 4 kampanya türü: % indirim, hediye çeki, indirim kodu, müşteriye özel
-- ✅ Admin CRUD sayfası (istatistik kartları + tab'lı form)
-- ✅ Otomatik kupon kodu üretici
-- ✅ Sepette indirim kodu girişi + canlı hesaplama
-- ✅ Kullanım limiti, min. sepet tutarı, tarih aralığı
-- ✅ Sipariş kaydında kampanya takibi
-
-#### 📍 Türkiye Adres Seçici
-- ✅ 81 il + tüm ilçeler JSON veri dosyası
-- ✅ Cascading İl → İlçe dropdown (AJAX)
-- ✅ Mahalle/Cadde serbest metin alanı
-- ✅ Adres ekleme + düzenleme formları
-- ✅ Checkout entegrasyonu
-
-#### 🚚 Adrese Teslim (Şehir İçi Teslimat)
-- ✅ Admin ayar sayfası (aktif/pasif, şehir, ücret, ilçe filtresi)
-- ✅ Müşteri önizleme paneli
-- ✅ Checkout'ta dinamik göster/gizle (İl seçimine göre)
-- ✅ Kargo satırı "Adrese Teslim" olarak değişiyor
-- ✅ Sipariş kaydında teslimat bilgisi
-
-#### 🖼️ Slider Yönetimi
-- ✅ Admin slider CRUD sayfası (premium tasarım)
-- ✅ Homepage dinamik slider + promosyon kartları
-
----
-
-### v1.0.0 — 17 Şubat 2026
-> 🚀 **İlk Sürüm**
-
-- ✅ E-ticaret altyapısı (ürün, sepet, sipariş)
-- ✅ Admin paneli (dashboard, ürün/kategori/sipariş yönetimi)
-- ✅ Müşteri paneli (siparişler, adresler, profil)
-- ✅ XML ürün import (dosya & URL)
-- ✅ Hiyerarşik kategori sistemi (alt kategoriler)
-- ✅ Mega menü & sidebar navigasyonu
-- ✅ Responsive tasarım
-- ✅ Arama & filtreleme (kategori, marka, fiyat)
-- ✅ Kurulum sihirbazı (setup.php)
-
----
-
-## 📄 Lisans
-
-Bu proje **MIT Lisansı** ile lisanslanmıştır.
-
----
-
-<p align="center">
-  <sub>⭐ Bu projeyi beğendiyseniz yıldız vermeyi unutmayın!</sub><br/>
-  <sub>Built with ❤️ by <b>Semih Akbaş</b></sub>
-</p>
+## 📝 Changelog
+Detaylı sürüm geçmişi için: **[CHANGELOG.md](CHANGELOG.md)**
