@@ -46,3 +46,20 @@
 - `vendor` FTP yaklaşımı bozulmadı.
 - Yapı `public_html` kök ve `.htaccess` (Apache/LiteSpeed) uyumunu bozmaz.
 - Dosya/çalışma yolları `open_basedir` kısıtlarına uygun tutuldu.
+
+## DirectAdmin Gerçek DB Smoke Test (Adım Adım)
+1. DirectAdmin panelinde proje dizinindeki `.env` dosyasını aç ve `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS` değerlerini gerçek sunucu bilgileriyle doldur.
+2. Tarayıcıdan `/install.php` çalıştır; kurulum tamamlandıktan sonra veritabanında `cms_pages` ve `cms_page_revisions` tablolarının oluştuğunu kontrol et.
+3. Admin panelde **Kurumsal CMS** ekranına gir (`/admin/cms-sayfalar.php`):
+   - yeni sayfa ekle (`slug: hakkimizda`),
+   - `durum: yayinda` seç,
+   - `meta_title`, `meta_description`, `canonical_url` alanlarını doldurup kaydet.
+4. Frontend kontrolü:
+   - `/sayfa/hakkimizda` URL’i açılıyor mu kontrol et,
+   - `durum=taslak` olan bir CMS sayfası için URL’in 404/403 verdiğini doğrula.
+5. `sitemap.xml` kontrolü:
+   - `/sitemap.xml` aç,
+   - yalnızca `yayinda` durumundaki CMS sayfalarının listelendiğini doğrula.
+6. Güvenlik kontrolü:
+   - CMS formunda CSRF token olmadan/bozuk token ile kaydetmeyi dene ve işlemin reddedildiğini doğrula,
+   - `manage_cms` yetkisi olmayan admin kullanıcısı ile `/admin/cms-sayfalar.php` erişiminin engellendiğini doğrula.
