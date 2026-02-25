@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
             // ========== TABLOLAR ==========
             // ========== TABLOLAR ==========
             $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
-            $pdo->exec("DROP TABLE IF EXISTS `wishlist`, `cart`, `order_items`, `orders`, `addresses`, `products`, `categories`, `users`, `settings`, `xml_imports`, `campaigns`, `campaign_usage`, `sliders`, `price_alerts`, `extensions`, `core_options`, `cms_page_revisions`, `cms_pages` ");
+            $pdo->exec("DROP TABLE IF EXISTS `wishlist`, `cart`, `order_items`, `orders`, `addresses`, `products`, `categories`, `users`, `settings`, `xml_imports`, `campaigns`, `campaign_usage`, `sliders`, `price_alerts`, `extensions`, `core_options`, `cms_page_revisions`, `cms_pages`, `cerez_izin_kayitlari` ");
             $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
 
             $pdo->exec("CREATE TABLE `users` (
@@ -366,6 +366,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
                 `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 KEY `idx_page_id` (`page_id`),
                 CONSTRAINT `fk_cms_rev_page` FOREIGN KEY (`page_id`) REFERENCES `cms_pages`(`id`) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+
+
+            // Çerez izin kayıtları (KVKK/GDPR)
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `cerez_izin_kayitlari` (
+                `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                `anonim_id` VARCHAR(64) NOT NULL,
+                `user_id` INT NULL,
+                `ip_adresi` VARCHAR(64) NOT NULL,
+                `user_agent` VARCHAR(255) DEFAULT '',
+                `karar` ENUM('kabul','reddet','tercih') NOT NULL,
+                `analitik_izin` TINYINT(1) NOT NULL DEFAULT 0,
+                `pazarlama_izin` TINYINT(1) NOT NULL DEFAULT 0,
+                `tercih_izin` TINYINT(1) NOT NULL DEFAULT 0,
+                `kaynak` VARCHAR(50) DEFAULT 'banner',
+                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                KEY `idx_cerez_tarih` (`created_at`),
+                KEY `idx_cerez_anonim` (`anonim_id`),
+                KEY `idx_cerez_user` (`user_id`),
+                KEY `idx_cerez_karar` (`karar`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
 
             $pdo->exec("CREATE TABLE IF NOT EXISTS `product_attributes` (

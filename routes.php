@@ -71,6 +71,12 @@ Router::get('/sitemap.xml', function () {
     require_once ROOT_PATH . 'sitemap.php';
 });
 
+
+// Çerez tercih kaydı
+Router::post('/cerez/tercih', function () {
+    require_once ROOT_PATH . 'cerez-tercih.php';
+}, ['CsrfMiddleware']);
+
 // ═══════════════════════════════════════════════
 // 2. CMS SAYFALAR — PageController
 // ═══════════════════════════════════════════════

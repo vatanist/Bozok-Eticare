@@ -79,7 +79,8 @@ $coreClasses = [
     'KurServisi',
     'TemaSozlesmesi',
     'SecenekServisi',
-    'ModulSozlesmesi'
+    'ModulSozlesmesi',
+    'CerezYonetimi'
 ];
 foreach ($coreClasses as $class) {
     if (!class_exists($class)) {
@@ -116,6 +117,13 @@ if (function_exists('aktif_tema_ayarla')) {
 if (function_exists('isAdmin') && !isAdmin()) {
     if (class_exists('Affiliate'))
         Affiliate::trackReferral();
-    if (class_exists('Marketing'))
+
+    $analitikIzinli = true;
+    if (class_exists('CerezYonetimi')) {
+        $analitikIzinli = CerezYonetimi::analitikIzniVarMi();
+    }
+
+    if ($analitikIzinli && class_exists('Marketing')) {
         Marketing::logVisitor();
+    }
 }

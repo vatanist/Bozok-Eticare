@@ -77,6 +77,9 @@
 </footer>
 
 <script src="<?= BASE_URL ?>/assets/js/main.js"></script>
+
+<?php require_once __DIR__ . '/cerez-banner.php'; ?>
+
 </body>
 
 </html>

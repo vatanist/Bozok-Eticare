@@ -60,6 +60,8 @@
 </div><!-- #page -->
 
 <?php hook_calistir('footer_sonu'); ?>
+
+<?php require_once __DIR__ . '/../../includes/cerez-banner.php'; ?>
 <?php hook_calistir('body_sonu'); ?>
 
 </body>

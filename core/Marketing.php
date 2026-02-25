@@ -11,16 +11,31 @@ class Marketing
      */
     public static function logVisitor()
     {
-        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
-        $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
-        $url = $_SERVER['REQUEST_URI'] ?? '';
-        $ref = $_SERVER['HTTP_REFERER'] ?? '';
+        $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+        $ua = (string) ($_SERVER['HTTP_USER_AGENT'] ?? '');
+        $url = (string) ($_SERVER['REQUEST_URI'] ?? '');
+        $ref = (string) ($_SERVER['HTTP_REFERER'] ?? '');
         $sid = session_id();
 
-        Database::query(
-            "INSERT INTO visitor_logs (ip, user_agent, page_url, referrer, session_id) VALUES (?, ?, ?, ?, ?)",
-            [$ip, $ua, $url, $ref, $sid]
-        );
+        // ===================== BAŞLANGIÇ: KVKK UYUMLU IP SAKLAMA =====================
+        $tamIpSakla = false;
+        if (function_exists('option_get')) {
+            $tamIpSakla = (bool) option_get('tam_ip_sakla', false, 'gizlilik');
+        }
+
+        if (!$tamIpSakla && class_exists('CerezYonetimi')) {
+            $ip = CerezYonetimi::ipMaskele($ip);
+        }
+        // ===================== BİTİŞ: KVKK UYUMLU IP SAKLAMA =====================
+
+        try {
+            Database::query(
+                "INSERT INTO visitor_logs (ip, user_agent, page_url, referrer, session_id) VALUES (?, ?, ?, ?, ?)",
+                [$ip, substr($ua, 0, 255), $url, $ref, $sid]
+            );
+        } catch (Throwable $e) {
+            error_log('Marketing::logVisitor hatası: ' . $e->getMessage());
+        }
     }
 
     /**

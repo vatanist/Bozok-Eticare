@@ -56,6 +56,9 @@ $adminUser = currentUser();
                         <a href="<?= BASE_URL ?>/admin/istatistikler.php"
                                 class="<?= ($adminPage ?? '') === 'analytics' ? 'active' : '' ?>"><i
                                         class="fas fa-chart-line"></i> Ziyaretçi Analitiği</a>
+                        <a href="<?= BASE_URL ?>/admin/cerez-yonetimi.php"
+                                class="<?= ($adminPage ?? '') === 'cookie_management' ? 'active' : '' ?>"><i
+                                        class="fas fa-cookie-bite"></i> Çerez Yönetimi</a>
 
                         <span class="admin-nav-section">Pazarlama</span>
                         <a href="<?= BASE_URL ?>/admin/kampanyalar.php"

@@ -582,3 +582,38 @@ function showFlash($a)
 {
     return mesaj_goster($a);
 }
+
+
+// ===================== BAŞLANGIÇ: ÇEREZ YÖNETİMİ YARDIMCILARI =====================
+/**
+ * Çerez tercihini döner.
+ */
+function cerez_tercihi_getir(): array
+{
+    if (!class_exists('CerezYonetimi')) {
+        return [
+            'zorunlu' => true,
+            'analitik' => false,
+            'pazarlama' => false,
+            'tercih' => false,
+            'karar' => 'bekleniyor',
+        ];
+    }
+
+    return CerezYonetimi::tercihleriOku();
+}
+
+/**
+ * Belirli çerez kategorisi izinli mi?
+ */
+function cerez_izinli_mi(string $kategori): bool
+{
+    $tercih = cerez_tercihi_getir();
+
+    if ($kategori === 'zorunlu') {
+        return true;
+    }
+
+    return !empty($tercih[$kategori]);
+}
+// ===================== BİTİŞ: ÇEREZ YÖNETİMİ YARDIMCILARI =====================
