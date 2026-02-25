@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
             // ========== TABLOLAR ==========
             // ========== TABLOLAR ==========
             $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
-            $pdo->exec("DROP TABLE IF EXISTS `wishlist`, `cart`, `order_items`, `orders`, `addresses`, `products`, `categories`, `users`, `settings`, `xml_imports`, `campaigns`, `campaign_usage`, `sliders`, `price_alerts`, `extensions`, `core_options`, `cms_page_revisions`, `cms_pages`, `cerez_izin_kayitlari` ");
+            $pdo->exec("DROP TABLE IF EXISTS `wishlist`, `cart`, `order_items`, `orders`, `addresses`, `products`, `categories`, `users`, `settings`, `xml_imports`, `campaigns`, `campaign_usage`, `sliders`, `price_alerts`, `extensions`, `core_options`, `cms_page_revisions`, `cms_pages`, `cerez_izin_kayitlari`, `analytics_events` ");
             $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
 
             $pdo->exec("CREATE TABLE `users` (
@@ -539,7 +539,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
                 `page_url` TEXT,
                 `referrer` TEXT,
                 `session_id` VARCHAR(100),
-                `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+                `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                KEY `idx_visitor_created_at` (`created_at`),
+                KEY `idx_visitor_session` (`session_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+
+            // Analitik olayları (hafif event tablosu)
+            $pdo->exec("CREATE TABLE IF NOT EXISTS `analytics_events` (
+                `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                `event_name` VARCHAR(60) NOT NULL,
+                `page_url` VARCHAR(500) DEFAULT NULL,
+                `referrer` VARCHAR(500) DEFAULT NULL,
+                `product_id` INT DEFAULT NULL,
+                `user_id` INT DEFAULT NULL,
+                `anonim_id` VARCHAR(64) DEFAULT NULL,
+                `session_id` VARCHAR(100) DEFAULT NULL,
+                `ip` VARCHAR(64) DEFAULT NULL,
+                `il` VARCHAR(100) DEFAULT 'Bilinmiyor',
+                `ilce` VARCHAR(100) DEFAULT 'Bilinmiyor',
+                `tarayici` VARCHAR(50) DEFAULT 'Diger',
+                `cihaz_tipi` VARCHAR(30) DEFAULT 'Masaustu',
+                `user_agent` VARCHAR(255) DEFAULT '',
+                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                KEY `idx_event_created_at` (`created_at`),
+                KEY `idx_event_adi_tarih` (`event_name`, `created_at`),
+                KEY `idx_event_anonim_tarih` (`anonim_id`, `created_at`),
+                KEY `idx_event_user_tarih` (`user_id`, `created_at`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
 
             // Pazaryeri API Log Tablosu

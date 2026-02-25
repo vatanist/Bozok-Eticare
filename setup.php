@@ -249,6 +249,42 @@ try {
         KEY `idx_cerez_karar` (`karar`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
 
+    // Ziyaretçi logları
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `visitor_logs` (
+        `id` INT AUTO_INCREMENT PRIMARY KEY,
+        `ip` VARCHAR(45),
+        `user_agent` TEXT,
+        `page_url` TEXT,
+        `referrer` TEXT,
+        `session_id` VARCHAR(100),
+        `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+        KEY `idx_visitor_created_at` (`created_at`),
+        KEY `idx_visitor_session` (`session_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+
+    // Analitik olayları (hafif event tablosu)
+    $pdo->exec("CREATE TABLE IF NOT EXISTS `analytics_events` (
+        `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        `event_name` VARCHAR(60) NOT NULL,
+        `page_url` VARCHAR(500) DEFAULT NULL,
+        `referrer` VARCHAR(500) DEFAULT NULL,
+        `product_id` INT DEFAULT NULL,
+        `user_id` INT DEFAULT NULL,
+        `anonim_id` VARCHAR(64) DEFAULT NULL,
+        `session_id` VARCHAR(100) DEFAULT NULL,
+        `ip` VARCHAR(64) DEFAULT NULL,
+        `il` VARCHAR(100) DEFAULT 'Bilinmiyor',
+        `ilce` VARCHAR(100) DEFAULT 'Bilinmiyor',
+        `tarayici` VARCHAR(50) DEFAULT 'Diger',
+        `cihaz_tipi` VARCHAR(30) DEFAULT 'Masaustu',
+        `user_agent` VARCHAR(255) DEFAULT '',
+        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        KEY `idx_event_created_at` (`created_at`),
+        KEY `idx_event_adi_tarih` (`event_name`, `created_at`),
+        KEY `idx_event_anonim_tarih` (`anonim_id`, `created_at`),
+        KEY `idx_event_user_tarih` (`user_id`, `created_at`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
+
     // XML Imports Log
     $pdo->exec("CREATE TABLE IF NOT EXISTS `xml_imports` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
