@@ -18,7 +18,7 @@
                     Dönüşüm <br>Bir Arada.</h1>
                 <p style="color: var(--gray); font-size: 1.1rem; margin-bottom: 30px;">Bozok E-Ticaret için özel olarak
                     uyarlanmış Svs Tema ile satışlarınızı katlayın.</p>
-                <a href="<?= BASE_URL ?>/urunler.php" class="buton"
+                <a href="<?= url('urunler') ?>" class="buton"
                     style="background: var(--dark); color: #fff; padding: 18px 45px; border-radius: 40px; font-weight: 800; text-decoration: none; display: inline-block;">Hemen
                     Alışverişe Başla <i class="fas fa-arrow-right"></i></a>
             </div>
@@ -64,7 +64,7 @@
         <h2 style="font-weight: 900; color: var(--dark); font-size: 2.2rem; margin: 0;">Sizin İçin Seçtiklerimiz</h2>
         <p style="color: var(--gray); margin-top: 5px;">En çok tercih edilen, en kaliteli ürünler.</p>
     </div>
-    <a href="<?= BASE_URL ?>/urunler.php" style="color: var(--primary); font-weight: 800; text-decoration: none;">Tümünü
+    <a href="<?= url('urunler') ?>" style="color: var(--primary); font-weight: 800; text-decoration: none;">Tümünü
         Gör <i class="fas fa-arrow-right"></i></a>
 </div>
 

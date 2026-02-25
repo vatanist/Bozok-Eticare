@@ -31,7 +31,7 @@
                     <i class="fas fa-truck"></i> Ücretsiz Kargo - 1000 TL ve Üzeri
                 </div>
                 <div class="top-bar-right" style="display: flex; gap: 20px;">
-                    <a href="<?= BASE_URL ?>/client/index.php" style="color: inherit; text-decoration: none;"><i
+                    <a href="<?= url('hesabim') ?>" style="color: inherit; text-decoration: none;"><i
                             class="fas fa-user"></i> Hesabım</a>
                     <a href="<?= BASE_URL ?>/sayfa/iletisim" style="color: inherit; text-decoration: none;"><i
                             class="fas fa-headset"></i> Yardım</a>
@@ -58,7 +58,7 @@
 
                 <!-- Arama -->
                 <div class="product-search" style="flex: 1; margin: 0 50px; position: relative;">
-                    <form action="<?= BASE_URL ?>/search.php" method="GET">
+                    <form action="<?= url('ara') ?>" method="GET">
                         <input type="text" name="q" placeholder="Ürün, kategori veya marka ara..."
                             style="width: 100%; padding: 12px 25px; border: 2px solid #f1f5f9; border-radius: 30px; outline: none; transition: 0.3s;"
                             onfocus="this.style.borderColor='var(--primary)'">
@@ -71,7 +71,7 @@
                 <!-- Header Actions -->
                 <div class="header-actions" style="display: flex; gap: 25px; align-items: center;">
                     <div class="header-cart">
-                        <a href="<?= BASE_URL ?>/sepet.php"
+                        <a href="<?= url('sepet') ?>"
                             style="position: relative; color: var(--dark); font-size: 22px;">
                             <i class="fas fa-shopping-basket"></i>
                             <span
@@ -88,7 +88,7 @@
             <div class="col-full" style="max-width: 1200px; margin: 0 auto; padding: 0 15px; display: flex; gap: 30px;">
                 <a href="<?= BASE_URL ?>"
                     style="font-weight: 700; color: var(--dark); text-decoration: none;">Anasayfa</a>
-                <a href="<?= BASE_URL ?>/urunler.php"
+                <a href="<?= url('urunler') ?>"
                     style="font-weight: 700; color: var(--dark); text-decoration: none;">Tüm Ürünler</a>
                 <!-- Kategoriler buraya dinamik gelebilir -->
             </div>

@@ -28,7 +28,7 @@ $aktif_kullanici = aktif_kullanici();
                     <?php endforeach; ?>
                 </ul>
                 <div style="padding:15px 25px;">
-                    <a href="<?= BASE_URL ?>/urunler.php"
+                    <a href="<?= url('urunler') ?>"
                         style="color:var(--primary); font-size:0.85rem; font-weight:700; text-decoration:none;">Tüm
                         Kategoriler <i class="fas fa-arrow-right" style="margin-left:5px;"></i></a>
                 </div>
@@ -42,7 +42,7 @@ $aktif_kullanici = aktif_kullanici();
                 <h4 style="font-weight:900; margin-bottom:10px;">%20 İNDİRİM</h4>
                 <p style="font-size:0.8rem; margin-bottom:20px; opacity:0.9;">İlk alışverişine özel "WELCOME20" kodunu
                     kullan!</p>
-                <a href="<?= BASE_URL ?>/urunler.php"
+                <a href="<?= url('urunler') ?>"
                     style="background:#fff; color:var(--warning); padding:8px 20px; border-radius:30px; text-decoration:none; font-size:0.8rem; font-weight:800;">FIRSATI
                     YAKALA</a>
             </div>
@@ -68,7 +68,7 @@ $aktif_kullanici = aktif_kullanici();
                         Teknolojisi, Bugün Evinizde.</h2>
                     <p style="font-size:1.1rem; opacity:0.9; margin-bottom:30px; line-height:1.6;">V-Commerce ile seçili
                         elektronik ürünlerde vadesiz 12 taksit ve aynı gün kargo avantajlarını kaçırmayın.</p>
-                    <a href="<?= BASE_URL ?>/urunler.php" class="buton"
+                    <a href="<?= url('urunler') ?>" class="buton"
                         style="background:#fff; color:var(--dark); padding:15px 40px; border-radius:40px; text-decoration:none; font-weight:800; font-size:1rem; box-shadow:0 10px 25px rgba(0,0,0,0.2); transition:0.3s;"
                         onmouseover="this.style.transform='translateY(-3px)';"
                         onmouseout="this.style.transform='translateY(0)';">Keşfetmeye Başla</a>
@@ -121,7 +121,7 @@ $aktif_kullanici = aktif_kullanici();
                     </h2>
                     <p style="color:var(--gray); margin:5px 0 0;">En çok tercih edilen popüler ürünler</p>
                 </div>
-                <a href="<?= BASE_URL ?>/urunler.php"
+                <a href="<?= url('urunler') ?>"
                     style="color:var(--primary); font-weight:700; text-decoration:none; padding:10px 20px; border:2px solid var(--primary-light); border-radius:15px; transition:0.3s;"
                     onmouseover="this.style.background='var(--primary-light)';"
                     onmouseout="this.style.background='transparent';">Tümünü Gör</a>

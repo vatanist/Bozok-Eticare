@@ -4,6 +4,18 @@
  */
 class TemaSozlesmesi
 {
+    // ===================== BAŞLANGIÇ: TEMA ADI TAKMA İSİM =====================
+    public static function temaAdiCozumle(string $tema_adi): string
+    {
+        $tema_adi = trim($tema_adi);
+        $takma_adlar = [
+            'shoptimizer' => 'svs-tema',
+        ];
+
+        return $takma_adlar[$tema_adi] ?? $tema_adi;
+    }
+    // ===================== BİTİŞ: TEMA ADI TAKMA İSİM =====================
+
     // ===================== BAŞLANGIÇ: KANCA SÖZLEŞMESİ =====================
     /**
      * Sistemin desteklediği standart kanca listesi.
@@ -58,14 +70,35 @@ class TemaSozlesmesi
      */
     public static function zorunluTemaDosyalari(): array
     {
+        // Minimum çalışır tema için zorunlu dosyalar
         return [
             'ust.php',
             'alt.php',
             'anasayfa.php',
+        ];
+    }
+
+    /**
+     * Tema içinde override edilebilen, eksikliği kritik olmayan dosyalar.
+     */
+    public static function opsiyonelTemaDosyalari(): array
+    {
+        return [
             'kategori.php',
             'urun-detay.php',
             'sepet.php',
             'odeme.php',
+            'arama.php',
+            'sayfa.php',
+            'hesap-dashboard.php',
+            'hesap-giris.php',
+            'hesap-profil.php',
+            'hesap-siparisler.php',
+            'hesap-siparis-detay.php',
+            'hesap-adresler.php',
+            'hesap-favoriler.php',
+            'hesap-fiyat-alarmlari.php',
+            'hesap-sidebar.php',
         ];
     }
 
@@ -115,6 +148,7 @@ class TemaSozlesmesi
     public static function temaSozlesmesiniDogrula(string $tema_klasoru): array
     {
         $hatalar = [];
+        $uyarilar = [];
 
         $json_var = is_file($tema_klasoru . DIRECTORY_SEPARATOR . 'theme.json');
         $style_var = is_file($tema_klasoru . DIRECTORY_SEPARATOR . 'style.css');
@@ -124,13 +158,20 @@ class TemaSozlesmesi
 
         foreach (self::zorunluTemaDosyalari() as $dosya) {
             if (!is_file($tema_klasoru . DIRECTORY_SEPARATOR . $dosya)) {
-                $hatalar[] = 'Eksik dosya: ' . $dosya;
+                $hatalar[] = 'Eksik zorunlu dosya: ' . $dosya;
+            }
+        }
+
+        foreach (self::opsiyonelTemaDosyalari() as $dosya) {
+            if (!is_file($tema_klasoru . DIRECTORY_SEPARATOR . $dosya)) {
+                $uyarilar[] = 'Opsiyonel override dosyası yok: ' . $dosya;
             }
         }
 
         return [
             'gecerli' => empty($hatalar),
             'hatalar' => $hatalar,
+            'uyarilar' => $uyarilar,
         ];
     }
 

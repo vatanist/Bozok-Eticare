@@ -59,6 +59,11 @@ $bozkurt = [
 function tema_adi_cozumle($tema_adi)
 {
     $tema_adi = trim((string) $tema_adi);
+
+    if (class_exists('TemaSozlesmesi')) {
+        return TemaSozlesmesi::temaAdiCozumle($tema_adi);
+    }
+
     $takma_adlar = [
         'shoptimizer' => 'svs-tema',
     ];
@@ -113,7 +118,25 @@ function git($adres)
     exit;
 }
 
+/**
+ * Router uyumlu URL üretir.
+ */
+function url($yol = '')
+{
+    $base = rtrim(BASE_URL, '/');
+    $yol = '/' . ltrim((string) $yol, '/');
+    return $base . $yol;
+}
+
 // ==================== TEMA SİSTEMİ ====================
+
+/**
+ * Tema görünüm yolu doğrular.
+ */
+function tema_gorunum_girdisi_dogrula($deger): bool
+{
+    return is_string($deger) && preg_match('#^[a-zA-Z0-9_\-/]+$#', $deger) === 1;
+}
 
 /**
  * Tema Şablonu Yükler (View)
@@ -128,36 +151,42 @@ function gorunum($yol, $veriler = [])
 {
     global $bozkurt;
 
-    // Path traversal koruması
-    $yol = str_replace(['..', "\0"], '', $yol);
+    // ===================== BAŞLANGIÇ: GÖRÜNÜM GİRDİ GÜVENLİĞİ =====================
+    $yol = str_replace(['..', "\0", ':'], '', (string) $yol);
+    if (!tema_gorunum_girdisi_dogrula($yol)) {
+        throw new \App\Exceptions\ViewNotFoundException($yol);
+    }
+    // ===================== BİTİŞ: GÖRÜNÜM GİRDİ GÜVENLİĞİ =====================
 
     if (!empty($veriler)) {
-        extract($veriler);
+        extract($veriler, EXTR_SKIP);
     }
 
     // Otomatik SEO meta değişkenleri
     $meta_title = $veriler['sayfa_basligi'] ?? ayar_getir('site_title', 'V-Commerce');
     $meta_desc = $veriler['meta_desc'] ?? '';
 
-    $sablon = $bozkurt['tema_yolu'] . '/' . $bozkurt['tema_adi'] . '/' . $yol . '.php';
+    // ===================== BAŞLANGIÇ: TEMA GÖRÜNÜM FALLBACK =====================
+    $aktif_sablon = $bozkurt['tema_yolu'] . '/' . $bozkurt['tema_adi'] . '/' . $yol . '.php';
+    $varsayilan_sablon = $bozkurt['tema_yolu'] . '/varsayilan/' . $yol . '.php';
 
-    if (file_exists($sablon)) {
-        require $sablon;
-    } else {
-        throw new \App\Exceptions\ViewNotFoundException($yol);
+    if (is_file($aktif_sablon)) {
+        require $aktif_sablon;
+        return;
     }
+
+    if (is_file($varsayilan_sablon)) {
+        require $varsayilan_sablon;
+        return;
+    }
+    // ===================== BİTİŞ: TEMA GÖRÜNÜM FALLBACK =====================
+
+    throw new \App\Exceptions\ViewNotFoundException($yol);
 }
-
-/**
- * Tema Dosyalarının (CSS/JS) Linkini Verir
- */
-
 
 /**
  * Belirtilen tema klasöründen görünüm yükler.
  * Örn: gorunum_tema('admin-temalar', $veriler, 'varsayilan')
- *
- * Güvenlik: Path traversal koruması (.., \0 engeli)
  *
  * @throws \App\Exceptions\ViewNotFoundException
  */
@@ -165,28 +194,63 @@ function gorunum_tema($yol, $veriler = [], $tema_adi = 'varsayilan')
 {
     global $bozkurt;
 
-    // ===================== BAŞLANGIÇ: TEMA GÖRÜNÜM ÇÖZÜMLEME =====================
-    $yol = str_replace(['..', "\0"], '', (string) $yol);
-    $tema_adi = tema_adi_cozumle((string) $tema_adi ?: 'varsayilan');
+    // ===================== BAŞLANGIÇ: TEMA BAZLI GÖRÜNÜM GÜVENLİĞİ =====================
+    $yol = str_replace(['..', "\0", ':'], '', (string) $yol);
+    $tema_adi = str_replace(['..', "\0", ':'], '', tema_adi_cozumle((string) $tema_adi ?: 'varsayilan'));
+
+    if (!tema_gorunum_girdisi_dogrula($yol) || !preg_match('#^[a-zA-Z0-9_-]+$#', $tema_adi)) {
+        error_log('Gorunum tema güvenlik doğrulaması başarısız.');
+        throw new \App\Exceptions\ViewNotFoundException($yol);
+    }
+    // ===================== BİTİŞ: TEMA BAZLI GÖRÜNÜM GÜVENLİĞİ =====================
 
     if (!empty($veriler)) {
-        extract($veriler);
+        extract($veriler, EXTR_SKIP);
     }
 
     $meta_title = $veriler['sayfa_basligi'] ?? ayar_getir('site_title', 'V-Commerce');
     $meta_desc = $veriler['meta_desc'] ?? '';
 
     $sablon = $bozkurt['tema_yolu'] . '/' . $tema_adi . '/' . $yol . '.php';
-    // ===================== BİTİŞ: TEMA GÖRÜNÜM ÇÖZÜMLEME =====================
-
-    if (file_exists($sablon)) {
+    if (is_file($sablon)) {
         require $sablon;
         return;
     }
 
+    error_log('Gorunum tema bulunamadı: ' . $tema_adi . '/' . $yol);
     throw new \App\Exceptions\ViewNotFoundException($yol);
 }
 
+/**
+ * Admin görünümlerini temadan bağımsız yükler.
+ */
+function gorunum_admin($yol, $veriler = [])
+{
+    $yol = str_replace(['..', "\0", ':'], '', (string) $yol);
+
+    if (!preg_match('#^[a-zA-Z0-9_\-/]+$#', $yol)) {
+        throw new \App\Exceptions\ViewNotFoundException($yol);
+    }
+
+    if (!empty($veriler)) {
+        extract($veriler, EXTR_SKIP);
+    }
+
+    $base = defined('ROOT_PATH') ? ROOT_PATH : dirname(__DIR__) . DIRECTORY_SEPARATOR;
+    $sablon = $base . 'admin' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . $yol . '.php';
+
+    if (is_file($sablon)) {
+        require $sablon;
+        return;
+    }
+
+    error_log('Admin görünüm bulunamadı: ' . $yol);
+    throw new \App\Exceptions\ViewNotFoundException($yol);
+}
+
+/**
+ * Tema Dosyalarının (CSS/JS) Linkini Verir
+ */
 function tema_linki($dosya = '')
 {
     global $bozkurt;
@@ -424,16 +488,4 @@ function redirect($a)
 function showFlash($a)
 {
     return mesaj_goster($a);
-}
-
-/** @deprecated v2.0'da kaldırılacak. csrf_kod() kullanın. */
-function csrfField()
-{
-    return csrf_kod();
-}
-
-/** @deprecated v2.0'da kaldırılacak. dogrula_csrf() kullanın. */
-function verifyCsrf()
-{
-    return dogrula_csrf();
 }

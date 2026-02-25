@@ -46,7 +46,7 @@
             </a>
 
             <div class="search-bar">
-                <form action="<?= BASE_URL ?>/search.php" method="GET">
+                <form action="<?= url('ara') ?>" method="GET">
                     <input type="text" name="q" value="<?= temiz($sorgu ?? '') ?>"
                         placeholder="Ürün veya kategori ara...">
                     <button type="submit"><i class="fas fa-search"></i></button>
@@ -55,18 +55,18 @@
 
             <div class="header-actions">
                 <?php if (giris_yapilmis_mi()): ?>
-                    <a href="<?= BASE_URL ?>/client/profile.php" class="header-action">
+                    <a href="<?= url('hesabim/profil') ?>" class="header-action">
                         <i class="far fa-user"></i>
                         <span>Hesabım</span>
                     </a>
                 <?php else: ?>
-                    <a href="<?= BASE_URL ?>/client/login.php" class="header-action">
+                    <a href="<?= url('hesabim/giris') ?>" class="header-action">
                         <i class="far fa-user"></i>
                         <span>Giriş Yap</span>
                     </a>
                 <?php endif; ?>
 
-                <a href="<?= BASE_URL ?>/sepet.php" class="header-action">
+                <a href="<?= url('sepet') ?>" class="header-action">
                     <i class="fas fa-shopping-bag"></i>
                     <span>Sepetim</span>
                     <?php $sepet_sayi = getCartCount(); ?>

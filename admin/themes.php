@@ -39,8 +39,9 @@ if (is_dir($tema_yolu)) {
             'author' => $meta['author'],
             'description' => $meta['description'],
             'metadata_kaynagi' => $meta['kaynak'],
-            'dogrulama_hatalari' => $dogrulama['hatalar'],
-            'gecerli' => $dogrulama['gecerli'],
+            'dogrulama_hatalari' => $dogrulama['hatalar'] ?? [],
+            'dogrulama_uyarilari' => $dogrulama['uyarilar'] ?? [],
+            'gecerli' => $dogrulama['gecerli'] ?? false,
             'screenshot' => file_exists($tema_klasoru . '/screenshot.png') ? BASE_URL . '/temalar/' . $t_kod . '/screenshot.png' : BASE_URL . '/assets/images/no-theme.png',
             'active' => ($aktif_tema == $t_kod)
         ];
@@ -53,4 +54,4 @@ $veriler = [
     'temalar' => $tum_temalar
 ];
 
-gorunum_tema('admin-temalar', $veriler, 'varsayilan');
+gorunum_admin('admin-temalar', $veriler);

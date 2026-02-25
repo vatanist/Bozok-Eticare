@@ -37,21 +37,21 @@
             <div class="footer-col">
                 <h4>Kurumsal</h4>
                 <ul>
-                    <li><a href="<?= BASE_URL ?>/page.php?slug=hakkimizda">Hakkımızda</a></li>
-                    <li><a href="<?= BASE_URL ?>/page.php?slug=iletisim">İletişim</a></li>
-                    <li><a href="<?= BASE_URL ?>/page.php?slug=gizlilik-politikasi">Gizlilik Politikası</a></li>
-                    <li><a href="<?= BASE_URL ?>/page.php?slug=mesafeli-satis-sozlesmesi">Satış Sözleşmesi</a></li>
-                    <li><a href="<?= BASE_URL ?>/page.php?slug=iptal-iade-kosullari">İptal ve İade</a></li>
+                    <li><a href="<?= url('hakkimizda') ?>">Hakkımızda</a></li>
+                    <li><a href="<?= url('iletisim') ?>">İletişim</a></li>
+                    <li><a href="<?= url('gizlilik-politikasi') ?>">Gizlilik Politikası</a></li>
+                    <li><a href="<?= url('mesafeli-satis-sozlesmesi') ?>">Satış Sözleşmesi</a></li>
+                    <li><a href="<?= url('iptal-iade') ?>">İptal ve İade</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>Hızlı Erişim</h4>
                 <ul>
                     <li><a href="<?= BASE_URL ?>/">Ana Sayfa</a></li>
-                    <li><a href="<?= BASE_URL ?>/search.php">Ürünleri Ara</a></li>
-                    <li><a href="<?= BASE_URL ?>/client/profile.php">Profil Ayarları</a></li>
-                    <li><a href="<?= BASE_URL ?>/client/orders.php">Siparişlerim</a></li>
-                    <li><a href="<?= BASE_URL ?>/client/wishlist.php">Favorilerim</a></li>
+                    <li><a href="<?= url('ara') ?>">Ürünleri Ara</a></li>
+                    <li><a href="<?= url('hesabim/profil') ?>">Profil Ayarları</a></li>
+                    <li><a href="<?= url('hesabim/siparisler') ?>">Siparişlerim</a></li>
+                    <li><a href="<?= url('hesabim/favoriler') ?>">Favorilerim</a></li>
                 </ul>
             </div>
             <div class="footer-col">
