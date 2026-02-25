@@ -1,13 +1,13 @@
 <?php
 /**
- * V-Commerce Bootstrap
+ * Bozok E-Ticaret Bootstrap
  * 
  * Tüm uygulamanın tek başlatma noktası.
  * Autoload, .env, session güvenliği, hata yönetimi.
  * 
  * SHARED HOSTING UYUMLU: vendor/ olmadan da çalışır.
  * 
- * @package VCommerce
+ * @package BozokETicaret
  * @version 2.0.0
  */
 
@@ -22,7 +22,7 @@ if (file_exists($autoloadPath)) {
     } catch (Throwable $e) {
         // vendor/ bozuk — graceful fail
         define('VCOMMERCE_COMPOSER', false);
-        error_log('V-Commerce: vendor/ yüklenemedi — ' . $e->getMessage());
+        error_log('Bozok E-Ticaret: vendor/ yüklenemedi — ' . $e->getMessage());
     }
 } else {
     define('VCOMMERCE_COMPOSER', false);
@@ -39,7 +39,7 @@ if (file_exists($envFile)) {
             $dotenv->load();
             $dotenv->required(['DB_HOST', 'DB_NAME', 'DB_USER'])->notEmpty();
         } catch (Throwable $e) {
-            error_log('V-Commerce: .env yükleme hatası — ' . $e->getMessage());
+            error_log('Bozok E-Ticaret: .env yükleme hatası — ' . $e->getMessage());
         }
     } else {
         // Manuel .env parser (Composer yok)
@@ -159,7 +159,7 @@ if (isDebug()) {
 
     // Graceful error page — production'da beyaz ekran yerine
     set_exception_handler(function (Throwable $e) {
-        error_log('V-Commerce Fatal: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+        error_log('Bozok E-Ticaret Fatal: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
 
         if (!headers_sent()) {
             http_response_code(500);

@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — Varyasyon Sistemi Migration
+ * Bozok E-Ticaret — Varyasyon Sistemi Migration
  * Yeni tablolar ekler, mevcut yapıya dokunmaz.
  * 
  * KULLANIM: /admin/migrations/run-variations.php

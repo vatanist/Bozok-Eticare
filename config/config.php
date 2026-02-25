@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce - Genel Konfigürasyon
+ * Bozok E-Ticaret - Genel Konfigürasyon
  * v2.0: Bootstrap entegrasyonu, .env desteği
  *
  * Session güvenliği bootstrap/app.php'de yönetilir.

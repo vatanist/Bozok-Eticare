@@ -100,7 +100,7 @@ class RateLimitMiddleware
             $data['blocked_until'] = time() + $blockSeconds;
             self::saveData($key, $data);
 
-            error_log("V-Commerce RateLimit: $action blocked for IP $identifier");
+            error_log("Bozok E-Ticaret RateLimit: $action blocked for IP $identifier");
 
             $remaining = $blockSeconds;
             self::respondBlocked($remaining, $action);

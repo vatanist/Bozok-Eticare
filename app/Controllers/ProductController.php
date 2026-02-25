@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — ProductController
+ * Bozok E-Ticaret — ProductController
  *
  * Ürün detay, kategori listeleme, arama.
  *

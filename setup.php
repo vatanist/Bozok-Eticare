@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce - Veritabanı Kurulum Scripti
+ * Bozok E-Ticaret - Veritabanı Kurulum Scripti
  * Bu script veritabanını ve tabloları oluşturur, demo verileri ekler.
  */
 
@@ -248,7 +248,7 @@ try {
     // Admin kullanıcı
     $adminPass = password_hash('admin123', PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("INSERT IGNORE INTO `users` (username, email, password, first_name, last_name, role, status) VALUES (?, ?, ?, ?, ?, 'admin', 1)");
-    $stmt->execute(['admin', 'admin@vcommerce.com', $adminPass, 'Admin', 'V-Commerce']);
+    $stmt->execute(['admin', 'admin@vcommerce.com', $adminPass, 'Admin', 'Bozok E-Ticaret']);
 
     // Demo müşteri
     $customerPass = password_hash('123456', PASSWORD_DEFAULT);
@@ -329,7 +329,7 @@ try {
 
     // Site Ayarları
     $settings = [
-        ['site_name', 'V-Commerce'],
+        ['site_name', 'Bozok E-Ticaret'],
         ['site_description', 'Elektronik Ürünlerde Güvenilir Alışveriş'],
         ['site_email', 'info@vcommerce.com'],
         ['site_phone', '+90 555 000 00 00'],

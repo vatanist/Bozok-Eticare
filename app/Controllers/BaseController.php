@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — BaseController
+ * Bozok E-Ticaret — BaseController
  *
  * Tüm Controller'ların ortak üst sınıfı.
  * Kısa yardımcı metotlar sağlar — framework yazmıyoruz,

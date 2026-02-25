@@ -49,7 +49,7 @@
                     <i class="fab fa-cc-stripe fa-2x"></i>
                 </div>
                 <p style="font-size:0.8rem; color:var(--gray-light);">Ödemeniz 256-bit SSL şifreleme ile %100 güvenli
-                    bir şekilde işlenmektedir. Kart bilgileriniz V-Commerce tarafından kaydedilmez.</p>
+                    bir şekilde işlenmektedir. Kart bilgileriniz Bozok E-Ticaret tarafından kaydedilmez.</p>
             </div>
         </div>
 

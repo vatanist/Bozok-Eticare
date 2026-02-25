@@ -2,7 +2,7 @@
 
 /**
  * API Master Controller
- * V-Commerce Enterprise RESTful Interface
+ * Bozok E-Ticaret Enterprise RESTful Interface
  */
 class ApiController
 {

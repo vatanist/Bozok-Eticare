@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — Veri Erişim Yardımcıları
+ * Bozok E-Ticaret — Veri Erişim Yardımcıları
  *
  * Ürün, kategori, istatistik, ayar, sepet ve kampanya fonksiyonları.
  *

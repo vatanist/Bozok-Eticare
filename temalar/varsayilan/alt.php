@@ -23,7 +23,7 @@
             <div class="footer-col">
                 <div class="logo" style="margin-bottom:20px;">
                     <div class="logo-icon" style="width:30px; height:30px; font-size:14px;">V</div>
-                    <span style="font-size:1.1rem;">V-Commerce</span>
+                    <span style="font-size:1.1rem;">Bozok E-Ticaret</span>
                 </div>
                 <p>Türkiye'nin en yeni nesil e-ticaret deneyimi. Bozkurt Core altyapısı ile hızlı, güvenli ve modern
                     alışveriş. Premium tasarım ve mükemmel kullanıcı deneyimi.</p>
@@ -69,7 +69,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; <?= date('Y') ?> V-Commerce. Tüm hakları saklıdır. <br><small>Bozkurt Core Premium Experience
+            <p>&copy; <?= date('Y') ?> Bozok E-Ticaret. Tüm hakları saklıdır. <br><small>Bozkurt Core Premium Experience
                     v1.1</small></p>
         </div>
     </div>

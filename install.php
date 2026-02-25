@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce - Kurulum Sihirbazı
+ * Bozok E-Ticaret - Kurulum Sihirbazı
  * İlk kurulumda veritabanı ve admin hesabı oluşturur.
  */
 session_start();
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
     $adminFirst = trim($_POST['admin_first'] ?? '');
     $adminLast = trim($_POST['admin_last'] ?? '');
 
-    $siteName = trim($_POST['site_name'] ?? 'V-Commerce');
+    $siteName = trim($_POST['site_name'] ?? 'Bozok E-Ticaret');
     $siteEmail = trim($_POST['site_email'] ?? '');
 
     // Validasyon
@@ -632,7 +632,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
                 $stmt->execute(['general', $s[0], $s[1]]);
 
             // ========== db.php DOSYASINI YAZ ==========
-            $dbConfig = "<?php\n/**\n * V-Commerce - Veritabanı Bağlantısı (PDO Singleton)\n */\n\nclass Database\n{\n    private static \$instance = null;\n    private \$pdo;\n\n    private \$host = " . var_export($dbHost, true) . ";\n    private \$dbname = " . var_export($dbName, true) . ";\n    private \$username = " . var_export($dbUser, true) . ";\n    private \$password = " . var_export($dbPass, true) . ";\n\n    private function __construct()\n    {\n        \$this->connect();\n    }\n\n    private function connect()\n    {\n        try {\n            \$this->pdo = new PDO(\n                \"mysql:host={\$this->host};dbname={\$this->dbname};charset=utf8mb4\",\n                \$this->username,\n                \$this->password,\n                [\n                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,\n                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,\n                    PDO::ATTR_EMULATE_PREPARES => false,\n                    PDO::MYSQL_ATTR_INIT_COMMAND => \"SET NAMES utf8mb4\"\n                ]\n            );\n        } catch (PDOException \$e) {\n            die(\"Veritabanı bağlantı hatası: \" . \$e->getMessage());\n        }\n    }\n\n    public static function getInstance()\n    {\n        if (self::\$instance === null) {\n            self::\$instance = new self();\n        }\n        return self::\$instance;\n    }\n\n    public function getConnection()\n    {\n        try {\n            \$this->pdo->query('SELECT 1');\n        } catch (PDOException \$e) {\n            \$this->connect();\n        }\n        return \$this->pdo;\n    }\n\n    public static function reconnect()\n    {\n        \$db = self::getInstance();\n        \$db->connect();\n    }\n\n    public static function query(\$sql, \$params = [])\n    {\n        \$pdo = self::getInstance()->getConnection();\n        try {\n            \$stmt = \$pdo->prepare(\$sql);\n            \$stmt->execute(\$params);\n            return \$stmt;\n        } catch (PDOException \$e) {\n            if (strpos(\$e->getMessage(), 'server has gone away') !== false || \$e->getCode() == 'HY000') {\n                self::reconnect();\n                \$pdo = self::getInstance()->getConnection();\n                \$stmt = \$pdo->prepare(\$sql);\n                \$stmt->execute(\$params);\n                return \$stmt;\n            }\n            throw \$e;\n        }\n    }\n\n    public static function fetch(\$sql, \$params = [])\n    {\n        return self::query(\$sql, \$params)->fetch();\n    }\n\n    public static function fetchAll(\$sql, \$params = [])\n    {\n        return self::query(\$sql, \$params)->fetchAll();\n    }\n\n    public static function lastInsertId()\n    {\n        return self::getInstance()->getConnection()->lastInsertId();\n    }\n}\n";
+            $dbConfig = "<?php\n/**\n * Bozok E-Ticaret - Veritabanı Bağlantısı (PDO Singleton)\n */\n\nclass Database\n{\n    private static \$instance = null;\n    private \$pdo;\n\n    private \$host = " . var_export($dbHost, true) . ";\n    private \$dbname = " . var_export($dbName, true) . ";\n    private \$username = " . var_export($dbUser, true) . ";\n    private \$password = " . var_export($dbPass, true) . ";\n\n    private function __construct()\n    {\n        \$this->connect();\n    }\n\n    private function connect()\n    {\n        try {\n            \$this->pdo = new PDO(\n                \"mysql:host={\$this->host};dbname={\$this->dbname};charset=utf8mb4\",\n                \$this->username,\n                \$this->password,\n                [\n                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,\n                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,\n                    PDO::ATTR_EMULATE_PREPARES => false,\n                    PDO::MYSQL_ATTR_INIT_COMMAND => \"SET NAMES utf8mb4\"\n                ]\n            );\n        } catch (PDOException \$e) {\n            die(\"Veritabanı bağlantı hatası: \" . \$e->getMessage());\n        }\n    }\n\n    public static function getInstance()\n    {\n        if (self::\$instance === null) {\n            self::\$instance = new self();\n        }\n        return self::\$instance;\n    }\n\n    public function getConnection()\n    {\n        try {\n            \$this->pdo->query('SELECT 1');\n        } catch (PDOException \$e) {\n            \$this->connect();\n        }\n        return \$this->pdo;\n    }\n\n    public static function reconnect()\n    {\n        \$db = self::getInstance();\n        \$db->connect();\n    }\n\n    public static function query(\$sql, \$params = [])\n    {\n        \$pdo = self::getInstance()->getConnection();\n        try {\n            \$stmt = \$pdo->prepare(\$sql);\n            \$stmt->execute(\$params);\n            return \$stmt;\n        } catch (PDOException \$e) {\n            if (strpos(\$e->getMessage(), 'server has gone away') !== false || \$e->getCode() == 'HY000') {\n                self::reconnect();\n                \$pdo = self::getInstance()->getConnection();\n                \$stmt = \$pdo->prepare(\$sql);\n                \$stmt->execute(\$params);\n                return \$stmt;\n            }\n            throw \$e;\n        }\n    }\n\n    public static function fetch(\$sql, \$params = [])\n    {\n        return self::query(\$sql, \$params)->fetch();\n    }\n\n    public static function fetchAll(\$sql, \$params = [])\n    {\n        return self::query(\$sql, \$params)->fetchAll();\n    }\n\n    public static function lastInsertId()\n    {\n        return self::getInstance()->getConnection()->lastInsertId();\n    }\n}\n";
 
             file_put_contents(__DIR__ . '/config/db.php', $dbConfig);
 
@@ -655,7 +655,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-Commerce Kurulum</title>
+    <title>Bozok E-Ticaret Kurulum</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -981,7 +981,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
     <div class="installer">
         <div class="installer-header">
             <div class="installer-logo">V</div>
-            <h1>V-Commerce Kurulum</h1>
+            <h1>Bozok E-Ticaret Kurulum</h1>
             <p>E-Ticaret platformunuzu birkaç adımda kurun</p>
         </div>
 
@@ -1109,7 +1109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
                     <div class="form-group">
                         <label>Site Adı</label>
                         <input type="text" name="site_name"
-                            value="<?= htmlspecialchars($_POST['site_name'] ?? 'V-Commerce') ?>">
+                            value="<?= htmlspecialchars($_POST['site_name'] ?? 'Bozok E-Ticaret') ?>">
                     </div>
                     <div class="form-group">
                         <label>İletişim E-postası</label>
@@ -1127,7 +1127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
                 <div class="success-card">
                     <div class="icon"><i class="fas fa-check"></i></div>
                     <h2>Kurulum Tamamlandı! 🎉</h2>
-                    <p>V-Commerce başarıyla kuruldu. Artık e-ticaret sitenizi yönetmeye başlayabilirsiniz.</p>
+                    <p>Bozok E-Ticaret başarıyla kuruldu. Artık e-ticaret sitenizi yönetmeye başlayabilirsiniz.</p>
                     <div class="success-links">
                         <a href="admin/login.php" class="primary"><i class="fas fa-lock"></i> Admin Paneli</a>
                         <a href="index.php" class="secondary"><i class="fas fa-home"></i> Ana Sayfa</a>

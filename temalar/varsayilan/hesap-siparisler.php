@@ -21,7 +21,7 @@
                         <i class="fas fa-shopping-bag fa-4x"
                             style="color:var(--gray-light); margin-bottom:20px; display:block;"></i>
                         <h2 style="color:var(--dark-600);">Henüz bir siparişin yok.</h2>
-                        <p style="color:var(--gray); margin-bottom:20px;">V-Commerce dünyasındaki milyonlarca üründen birini
+                        <p style="color:var(--gray); margin-bottom:20px;">Bozok E-Ticaret dünyasındaki milyonlarca üründen birini
                             hemen keşfet!</p>
                         <a href="<?= BASE_URL ?>/urunler.php" class="buton"
                             style="display:inline-block; background:var(--primary); color:#fff; padding:12px 30px; border-radius:30px; font-weight:700;">Alışverişe

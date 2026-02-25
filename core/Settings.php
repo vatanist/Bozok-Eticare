@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce - Merkezi Ayar Motoru (Settings Engine)
+ * Bozok E-Ticaret - Merkezi Ayar Motoru (Settings Engine)
  */
 class Settings
 {

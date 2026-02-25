@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kayıt Ol - V-Commerce</title>
+    <title>Kayıt Ol - Bozok E-Ticaret</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/components.css">
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="auth-card" style="max-width:500px">
             <a href="<?= BASE_URL ?>/" class="logo">
                 <div class="logo-icon">V</div>
-                V-Commerce
+                Bozok E-Ticaret
             </a>
             <h2>Yeni Hesap Oluşturun</h2>
 

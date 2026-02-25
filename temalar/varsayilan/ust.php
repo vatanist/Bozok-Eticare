@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= temiz($sayfa_basligi ?? 'V-Commerce - Premium E-Ticaret') ?></title>
+    <title><?= temiz($sayfa_basligi ?? 'Bozok E-Ticaret - Premium E-Ticaret') ?></title>
 
     <?php if (!empty($meta_desc)): ?>
         <meta name="description" content="<?= temiz($meta_desc) ?>">
@@ -49,7 +49,7 @@
         <div class="header-inner">
             <a href="<?= BASE_URL ?>" class="logo">
                 <div class="logo-icon">V</div>
-                <span>V-Commerce</span>
+                <span>Bozok E-Ticaret</span>
             </a>
 
             <div class="search-bar">

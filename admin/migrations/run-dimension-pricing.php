@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — Boyut Bazlı Fiyatlandırma Migration
+ * Bozok E-Ticaret — Boyut Bazlı Fiyatlandırma Migration
  * products tablosuna pricing alanları ekler.
  *
  * KULLANIM: /admin/migrations/run-dimension-pricing.php

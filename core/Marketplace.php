@@ -2,7 +2,7 @@
 
 /**
  * Marketplace Master Engine
- * V-Commerce Enterprise Omnichannel Management
+ * Bozok E-Ticaret Enterprise Omnichannel Management
  */
 abstract class Marketplace
 {

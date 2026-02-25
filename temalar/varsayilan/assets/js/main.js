@@ -1,5 +1,5 @@
 /**
- * V-Commerce - Frontend JavaScript
+ * Bozok E-Ticaret - Frontend JavaScript
  */
 
 document.addEventListener('DOMContentLoaded', function () {

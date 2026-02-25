@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — CartController
+ * Bozok E-Ticaret — CartController
  *
  * Sepet görüntüleme, ürün ekleme/güncelleme/silme, kupon uygulama.
  * CartService'i kullanır.

@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — AuthController
+ * Bozok E-Ticaret — AuthController
  *
  * Giriş, kayıt, çıkış işlemleri.
  * client/login.php, register.php, logout.php'den taşınmıştır.

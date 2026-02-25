@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce - Route Tanımları
+ * Bozok E-Ticaret - Route Tanımları
  *
  * Bu dosya tüm frontend route'larını tanımlar.
  * index.php tarafından include edilir.
@@ -20,7 +20,7 @@
  *   - Dosyalar rename/silinince Apache index.php'ye yönlendirir → Router 301 çalışır
  *   - Shadow mode'da performans maliyeti SIFIR (double match yok)
  *
- * @package VCommerce
+ * @package BozokETicaret
  * @version 2.0.0
  */
 

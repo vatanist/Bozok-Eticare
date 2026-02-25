@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — ViewNotFoundException
+ * Bozok E-Ticaret — ViewNotFoundException
  *
  * gorunum() şablon bulamadığında fırlatılır.
  * Router dispatch'te yakalanıp 404'e dönüştürülür.

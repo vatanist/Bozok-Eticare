@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — Metin Yardımcıları
+ * Bozok E-Ticaret — Metin Yardımcıları
  *
  * Metin temizleme, slug oluşturma, kısaltma, fiyat biçimlendirme.
  *

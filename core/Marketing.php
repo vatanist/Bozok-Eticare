@@ -2,7 +2,7 @@
 
 /**
  * Marketing & Analytics Engine
- * V-Commerce Enterprise Growth & Insight Management
+ * Bozok E-Ticaret Enterprise Growth & Insight Management
  */
 class Marketing
 {

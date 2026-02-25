@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce - Merkezi Yetkilendirme Motoru (RBAC)
+ * Bozok E-Ticaret - Merkezi Yetkilendirme Motoru (RBAC)
  */
 class Auth
 {

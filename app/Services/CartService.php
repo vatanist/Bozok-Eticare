@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — CartService
+ * Bozok E-Ticaret — CartService
  *
  * Sepet iş mantığını merkezileştirir.
  * Oturum tabanlı (misafir) ve veritabanı tabanlı (üye) sepet yönetimi.

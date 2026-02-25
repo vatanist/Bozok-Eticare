@@ -1,6 +1,6 @@
 <?php
 /**
- * V-Commerce — Medya Yardımcıları
+ * Bozok E-Ticaret — Medya Yardımcıları
  *
  * Resim URL çözümleme, güvenli resim yükleme, tema dosya linkleri.
  *

@@ -2,7 +2,7 @@
 
 /**
  * Product Master Engine
- * V-Commerce Enterprise Product Management
+ * Bozok E-Ticaret Enterprise Product Management
  */
 class Product
 {

@@ -1,5 +1,5 @@
 <?php
-gorunum('ust', ['sayfa_basligi' => 'V-Commerce - Premium Alışveriş Deneyimi']);
+gorunum('ust', ['sayfa_basligi' => 'Bozok E-Ticaret - Premium Alışveriş Deneyimi']);
 $aktif_kullanici = aktif_kullanici();
 ?>
 
@@ -66,7 +66,7 @@ $aktif_kullanici = aktif_kullanici();
                         LİMİTLİ STOK</div>
                     <h2 style="font-size:3rem; font-weight:900; margin-bottom:15px; line-height:1.1;">Geleceğin
                         Teknolojisi, Bugün Evinizde.</h2>
-                    <p style="font-size:1.1rem; opacity:0.9; margin-bottom:30px; line-height:1.6;">V-Commerce ile seçili
+                    <p style="font-size:1.1rem; opacity:0.9; margin-bottom:30px; line-height:1.6;">Bozok E-Ticaret ile seçili
                         elektronik ürünlerde vadesiz 12 taksit ve aynı gün kargo avantajlarını kaçırmayın.</p>
                     <a href="<?= url('urunler') ?>" class="buton"
                         style="background:#fff; color:var(--dark); padding:15px 40px; border-radius:40px; text-decoration:none; font-weight:800; font-size:1rem; box-shadow:0 10px 25px rgba(0,0,0,0.2); transition:0.3s;"

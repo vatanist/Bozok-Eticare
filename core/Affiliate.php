@@ -2,7 +2,7 @@
 
 /**
  * Affiliate Master Engine
- * V-Commerce Enterprise Growth & Referral Management
+ * Bozok E-Ticaret Enterprise Growth & Referral Management
  */
 class Affiliate
 {

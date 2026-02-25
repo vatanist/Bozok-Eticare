@@ -13,6 +13,12 @@
 
 ---
 
+## 🏆 DirectAdmin MultiPHP Shared Hosting Uyumluluğu (Altın Kural)
+- SSH/composer zorunluluğu yoktur.
+- `vendor` klasörü FTP ile taşınabilir.
+- Proje `public_html` kök yapıda çalışır (ek servis/daemon gerektirmez).
+- `.htaccess` (Apache/LiteSpeed) ve `open_basedir` kısıtlarıyla uyumludur.
+
 ## 🎯 Güncel Durum (P0 – P1 – P3)
 
 ### ✅ P0 Stabilizasyonu
@@ -64,6 +70,10 @@
 
 ---
 
+## 🗺️ Roadmap / Backlog (P2/P3)
+- Admin panelden girilecek ücretsiz Google Gemini API ile ürün açıklamasını **otomatik / manuel** üretme.
+- Varyasyon/özelleştirme alanına dosya yükleme (kategori + ürün bazlı aktif/pasif, güvenli upload).
+
 ## 📚 Dokümantasyon
 - `docs/P0-DOGRULAMA-NOTU.md`
 - `docs/P1-PR1-DOGRULAMA-NOTU.md`
@@ -74,4 +84,6 @@
 ---
 
 ## 📝 Changelog
+Sürüm: **2.1.0**
+
 Detaylı sürüm geçmişi için: **[CHANGELOG.md](CHANGELOG.md)**

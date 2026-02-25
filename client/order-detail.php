@@ -39,9 +39,9 @@ $urunler = Database::fetchAll(
 $banka = null;
 if ($siparis['payment_method'] === 'havale') {
     $banka = [
-        'bank_name' => ayar_getir('banka_adi', 'V-Commerce Banka'),
+        'bank_name' => ayar_getir('banka_adi', 'Bozok E-Ticaret Banka'),
         'bank_iban' => ayar_getir('banka_iban', 'TR00 0000 0000 0000 0000 0000 00'),
-        'bank_account_holder' => ayar_getir('banka_alici', 'V-Commerce LTD.')
+        'bank_account_holder' => ayar_getir('banka_alici', 'Bozok E-Ticaret LTD.')
     ];
 }
 
