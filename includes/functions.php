@@ -129,6 +129,65 @@ function url($yol = '')
     return $base . $yol;
 }
 
+
+
+// ===================== BAŞLANGIÇ: OPTIONS API SARMALAYICILARI =====================
+/**
+ * Seçenek değerini getirir.
+ */
+function option_get($anahtar, $varsayilan = null, $grup = 'genel')
+{
+    if (!class_exists('SecenekServisi')) {
+        return $varsayilan;
+    }
+    return SecenekServisi::getir((string) $anahtar, $varsayilan, (string) $grup);
+}
+
+/**
+ * Seçenek değerini kaydeder/günceller.
+ */
+function option_set($anahtar, $deger, $grup = 'genel', $autoload = false)
+{
+    if (!class_exists('SecenekServisi')) {
+        return false;
+    }
+    return SecenekServisi::yaz((string) $anahtar, $deger, (string) $grup, (bool) $autoload);
+}
+
+/**
+ * Seçeneği siler.
+ */
+function option_delete($anahtar, $grup = 'genel')
+{
+    if (!class_exists('SecenekServisi')) {
+        return false;
+    }
+    return SecenekServisi::sil((string) $anahtar, (string) $grup);
+}
+
+/**
+ * Seçenek var mı kontrol eder.
+ */
+function option_has($anahtar, $grup = 'genel')
+{
+    if (!class_exists('SecenekServisi')) {
+        return false;
+    }
+    return SecenekServisi::varMi((string) $anahtar, (string) $grup);
+}
+
+/**
+ * Bir seçeneğin grubunu toplu getirir.
+ */
+function option_get_group($grup = 'genel')
+{
+    if (!class_exists('SecenekServisi')) {
+        return [];
+    }
+    return SecenekServisi::grupGetir((string) $grup);
+}
+// ===================== BİTİŞ: OPTIONS API SARMALAYICILARI =====================
+
 // ==================== TEMA SİSTEMİ ====================
 
 /**
