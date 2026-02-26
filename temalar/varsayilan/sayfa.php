@@ -32,7 +32,7 @@
             </header>
 
             <div class="cms-content" style="font-size:1.1rem; line-height:1.8; color:#374151;">
-                <?= $sayfa['icerik_guvenli'] ?? '' ?>
+                <?= $sayfa['content'] ?? '' ?>
             </div>
         </article>
 

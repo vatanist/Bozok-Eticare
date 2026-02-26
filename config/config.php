@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret - Genel Konfigürasyon
+ * V-Commerce - Genel Konfigürasyon
  * v2.0: Bootstrap entegrasyonu, .env desteği
  *
  * Session güvenliği bootstrap/app.php'de yönetilir.
@@ -52,9 +52,7 @@ if (!class_exists('Database')) {
 }
 
 // Functions dahil et (autoload files'tan yüklenmemişse)
-// Not: e() helper'ı app/Helpers altında da tanımlı olabilir.
-// Bu yüzden yalnızca e() kontrolü yeterli değil; $bozkurt ve çekirdek görünüm fonksiyonları da garanti edilmeli.
-if (!isset($bozkurt) || !function_exists('gorunum') || !function_exists('aktif_tema_ayarla')) {
+if (!function_exists('e')) {
     require_once ROOT_PATH . 'includes' . DIRECTORY_SEPARATOR . 'functions.php';
 }
 
@@ -77,12 +75,7 @@ $coreClasses = [
     'Affiliate',
     'Marketing',
     'ApiController',
-    'Notification',
-    'KurServisi',
-    'TemaSozlesmesi',
-    'SecenekServisi',
-    'ModulSozlesmesi',
-    'CerezYonetimi'
+    'Notification'
 ];
 foreach ($coreClasses as $class) {
     if (!class_exists($class)) {
@@ -108,24 +101,10 @@ foreach ($adapterClasses as $adapter) {
 $database = Database::getInstance();
 $db = $database->getConnection();
 
-// ===================== BAŞLANGIÇ: AKTİF TEMA YÜKLEME =====================
-if (function_exists('aktif_tema_ayarla')) {
-    $aktif_tema = function_exists('ayar_getir') ? ayar_getir('active_theme', 'varsayilan') : 'varsayilan';
-    aktif_tema_ayarla($aktif_tema);
-}
-// ===================== BİTİŞ: AKTİF TEMA YÜKLEME =====================
-
 // Global Tracking (Ziyaretçi ve Referans Takibi)
 if (function_exists('isAdmin') && !isAdmin()) {
     if (class_exists('Affiliate'))
         Affiliate::trackReferral();
-
-    $analitikIzinli = true;
-    if (class_exists('CerezYonetimi')) {
-        $analitikIzinli = CerezYonetimi::analitikIzniVarMi();
-    }
-
-    if ($analitikIzinli && class_exists('Marketing')) {
+    if (class_exists('Marketing'))
         Marketing::logVisitor();
-    }
 }

@@ -6,8 +6,6 @@
 </div><!-- .col-full -->
 </div><!-- #content -->
 
-<?php hook_calistir('footer_basi'); ?>
-
 <footer id="colophon" class="site-footer"
     style="background: #fff; padding: 60px 0; border-top: 1px solid #f1f5f9; margin-top: 50px;">
     <div class="col-full" style="max-width: 1200px; margin: 0 auto; padding: 0 15px;">
@@ -46,7 +44,7 @@
         <div
             style="border-top: 1px solid #f1f5f9; padding-top: 30px; display: flex; justify-content: space-between; align-items: center; color: var(--gray); font-size: 13px;">
             <p>&copy;
-                <?= date('Y') ?> Bozok E-Ticaret Svs Tema. Tüm Hakları Saklıdır.
+                <?= date('Y') ?> V-Commerce Shoptimizer Port. Tüm Hakları Saklıdır.
             </p>
             <div style="display: flex; gap: 15px; font-size: 18px;">
                 <i class="fab fa-facebook-f"></i>
@@ -59,10 +57,7 @@
 
 </div><!-- #page -->
 
-<?php hook_calistir('footer_sonu'); ?>
-
-<?php require_once __DIR__ . '/../../includes/cerez-banner.php'; ?>
-<?php hook_calistir('body_sonu'); ?>
+<?php hook_calistir('alt_sonu'); ?>
 
 </body>
 

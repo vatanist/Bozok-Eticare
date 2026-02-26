@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret - Route Tanımları
+ * V-Commerce - Route Tanımları
  *
  * Bu dosya tüm frontend route'larını tanımlar.
  * index.php tarafından include edilir.
@@ -20,7 +20,7 @@
  *   - Dosyalar rename/silinince Apache index.php'ye yönlendirir → Router 301 çalışır
  *   - Shadow mode'da performans maliyeti SIFIR (double match yok)
  *
- * @package BozokETicaret
+ * @package VCommerce
  * @version 2.0.0
  */
 
@@ -70,12 +70,6 @@ Router::post('/siparis-tamamla', 'CheckoutController@process', ['AuthMiddleware'
 Router::get('/sitemap.xml', function () {
     require_once ROOT_PATH . 'sitemap.php';
 });
-
-
-// Çerez tercih kaydı
-Router::post('/cerez/tercih', function () {
-    require_once ROOT_PATH . 'cerez-tercih.php';
-}, ['CsrfMiddleware']);
 
 // ═══════════════════════════════════════════════
 // 2. CMS SAYFALAR — PageController

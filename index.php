@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret - Enterprise Front Controller (Faz 1)
+ * V-Commerce - Enterprise Front Controller (Faz 1)
  */
 require_once 'config/config.php';
 

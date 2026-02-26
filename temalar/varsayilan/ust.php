@@ -4,16 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= temiz($sayfa_basligi ?? 'Bozok E-Ticaret - Premium E-Ticaret') ?></title>
-
-    <?php if (!empty($meta_desc)): ?>
-        <meta name="description" content="<?= temiz($meta_desc) ?>">
-    <?php endif; ?>
-    <?php if (!empty($canonical_url)): ?>
-        <link rel="canonical" href="<?= temiz($canonical_url) ?>">
-    <?php endif; ?>
-
-    <?php hook_calistir('head_basi'); ?>
+    <title><?= temiz($sayfa_basligi ?? 'V-Commerce - Premium E-Ticaret') ?></title>
 
     <!-- Tasarım ve İkonlar -->
     <link rel="stylesheet" href="<?= tema_linki('assets/css/style.css') ?>">
@@ -49,11 +40,11 @@
         <div class="header-inner">
             <a href="<?= BASE_URL ?>" class="logo">
                 <div class="logo-icon">V</div>
-                <span>Bozok E-Ticaret</span>
+                <span>V-Commerce</span>
             </a>
 
             <div class="search-bar">
-                <form action="<?= url('ara') ?>" method="GET">
+                <form action="<?= BASE_URL ?>/search.php" method="GET">
                     <input type="text" name="q" value="<?= temiz($sorgu ?? '') ?>"
                         placeholder="Ürün veya kategori ara...">
                     <button type="submit"><i class="fas fa-search"></i></button>
@@ -62,18 +53,18 @@
 
             <div class="header-actions">
                 <?php if (giris_yapilmis_mi()): ?>
-                    <a href="<?= url('hesabim/profil') ?>" class="header-action">
+                    <a href="<?= BASE_URL ?>/client/profile.php" class="header-action">
                         <i class="far fa-user"></i>
                         <span>Hesabım</span>
                     </a>
                 <?php else: ?>
-                    <a href="<?= url('hesabim/giris') ?>" class="header-action">
+                    <a href="<?= BASE_URL ?>/client/login.php" class="header-action">
                         <i class="far fa-user"></i>
                         <span>Giriş Yap</span>
                     </a>
                 <?php endif; ?>
 
-                <a href="<?= url('sepet') ?>" class="header-action">
+                <a href="<?= BASE_URL ?>/sepet.php" class="header-action">
                     <i class="fas fa-shopping-bag"></i>
                     <span>Sepetim</span>
                     <?php $sepet_sayi = getCartCount(); ?>

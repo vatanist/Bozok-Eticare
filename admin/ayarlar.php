@@ -59,7 +59,7 @@ $allSettings = Settings::group($activeTab);
                     <div class="form-row">
                         <div class="form-group">
                             <label>Site Adı</label>
-                            <input type="text" name="s[site_name]" class="form-control" value="<?= e(Settings::get('site_name', 'general', 'Bozok E-Ticaret')) ?>">
+                            <input type="text" name="s[site_name]" class="form-control" value="<?= e(Settings::get('site_name', 'general', 'V-Commerce')) ?>">
                         </div>
                         <div class="form-group">
                             <label>Site E-posta</label>

@@ -24,7 +24,7 @@ class TrendyolAdapter extends Marketplace
                     'barcode' => $product['barcode'] ?: 'VC-' . $product['id'],
                     'title' => $product['name'],
                     'productMainId' => $product['id'],
-                    'brandId' => 1, // Örn: Bozok E-Ticaret Marka ID
+                    'brandId' => 1, // Örn: V-Commerce Marka ID
                     'categoryId' => 1, // Örn: Kategori eşleştirme mantığı gelecek
                     'quantity' => $product['stock'],
                     'stockCode' => $product['sku'],

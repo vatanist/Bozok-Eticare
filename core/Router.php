@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret - Merkezi Router Sınıfı
+ * V-Commerce - Merkezi Router Sınıfı
  *
  * Güvenlik:
  *   - URI uzunluk limiti (2048 → 414)
@@ -14,7 +14,7 @@
  *   - 405 Method Not Allowed + Allow header (REST uyumlu)
  *   - Middleware hook desteği (route bazlı + grup bazlı)
  *
- * @package BozokETicaret
+ * @package VCommerce
  * @version 2.1.0
  */
 class Router
@@ -225,7 +225,7 @@ class Router
                 try {
                     return self::callCallback($route['callback'], $params);
                 } catch (\App\Exceptions\ViewNotFoundException $e) {
-                    error_log('Bozok E-Ticaret: ' . $e->getMessage());
+                    error_log('V-Commerce: ' . $e->getMessage());
                     self::notFound();
                 }
             }
@@ -281,7 +281,7 @@ class Router
 
         // Middleware bulunamadı → FAIL-CLOSED (güvenlik önceliği)
         // Production'da middleware typo olursa route korumasız kalmaz
-        error_log("Bozok E-Ticaret Router: Middleware bulunamadı: {$middleware} — istek engellendi (fail-closed)");
+        error_log("V-Commerce Router: Middleware bulunamadı: {$middleware} — istek engellendi (fail-closed)");
 
         // Debug modunda detaylı bilgi göster
         if (function_exists('isDebug') && isDebug()) {
@@ -362,7 +362,7 @@ class Router
 
             // Sınıf bulunamadı → fail-closed
             if (!class_exists($fqcn)) {
-                error_log("Bozok E-Ticaret Router: Controller bulunamadı: {$class}");
+                error_log("V-Commerce Router: Controller bulunamadı: {$class}");
                 if (function_exists('isDebug') && isDebug()) {
                     http_response_code(500);
                     die("Controller bulunamadı: {$class}");
@@ -373,7 +373,7 @@ class Router
 
             // Metot kontrolü
             if (!method_exists($fqcn, $method)) {
-                error_log("Bozok E-Ticaret Router: Metot bulunamadı: {$class}@{$method}");
+                error_log("V-Commerce Router: Metot bulunamadı: {$class}@{$method}");
                 if (function_exists('isDebug') && isDebug()) {
                     http_response_code(500);
                     die("Metot bulunamadı: {$class}@{$method}");

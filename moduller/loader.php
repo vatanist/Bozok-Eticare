@@ -11,7 +11,7 @@ if (!isset($bozkurt)) {
 $modul_yolu = $bozkurt['modul_yolu'];
 
 // Veritabanından aktif modülleri çek
-$aktif_moduller = Database::fetchAll("SELECT * FROM extensions WHERE type IN ('module','payment','shipping','marketing') AND status = 1");
+$aktif_moduller = Database::fetchAll("SELECT * FROM extensions WHERE type = 'module' AND status = 1");
 
 foreach ($aktif_moduller as $m) {
     // Modül dizini: moduller/{kategori}/{kod}/

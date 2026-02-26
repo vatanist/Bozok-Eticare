@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret — CartController
+ * V-Commerce — CartController
  *
  * Sepet görüntüleme, ürün ekleme/güncelleme/silme, kupon uygulama.
  * CartService'i kullanır.
@@ -34,15 +34,6 @@ class CartController extends BaseController
         $adet = intval($this->postInput('adet', $this->input('adet', 1)));
 
         if ($urunId > 0 && CartService::add($urunId, $adet)) {
-            // ===================== BAŞLANGIÇ: ANALİTİK OLAYI =====================
-            if (class_exists('\Marketing')) {
-                \Marketing::olayKaydet('add_to_cart', [
-                    'product_id' => $urunId,
-                    'page_url' => (string) ($_SERVER['REQUEST_URI'] ?? '/sepet/ekle'),
-                ]);
-            }
-            // ===================== BİTİŞ: ANALİTİK OLAYI =====================
-
             $this->flash('sepet', 'Ürün sepete eklendi.');
         }
         $this->redirect('/sepet');

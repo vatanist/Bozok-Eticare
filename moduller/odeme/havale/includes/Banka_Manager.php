@@ -11,7 +11,7 @@ class Banka_Manager
         return [
             [
                 'ad' => 'Ziraat Bankası',
-                'alici' => 'Bozok E-Ticaret Ltd. Şti.',
+                'alici' => 'V-Commerce Ltd. Şti.',
                 'sube' => 'İstanbul Kurumsal',
                 'hesap_no' => '12345678',
                 'iban' => 'TR00 0000 0000 0000 1234 5678 90',
@@ -19,7 +19,7 @@ class Banka_Manager
             ],
             [
                 'ad' => 'Garanti BBVA',
-                'alici' => 'Bozok E-Ticaret Ltd. Şti.',
+                'alici' => 'V-Commerce Ltd. Şti.',
                 'sube' => 'Maslak Ticari',
                 'hesap_no' => '98765432',
                 'iban' => 'TR11 1111 1111 1111 9876 5432 10',

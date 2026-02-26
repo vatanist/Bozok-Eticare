@@ -2,7 +2,7 @@
 
 /**
  * Cargo & Logistics Engine
- * Bozok E-Ticaret Enterprise Logistics Management
+ * V-Commerce Enterprise Logistics Management
  */
 class Cargo
 {

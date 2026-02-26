@@ -25,26 +25,6 @@ namespace App\Middleware;
  */
 class RateLimitMiddleware
 {
-
-    // ===================== BAŞLANGIÇ: YÖNLENDİRİCİ UYUMLULUK KATMANI =====================
-    /**
-     * Yönlendirici ara katman sözleşmesi.
-     */
-    public static function handle($param = null)
-    {
-        return self::calistir($param);
-    }
-
-    /**
-     * Ara katman ana çalıştırıcısı.
-     */
-    public static function calistir($param = null): bool
-    {
-        $eylem = is_string($param) && $param !== '' ? $param : 'api';
-        return self::check($eylem);
-    }
-    // ===================== BİTİŞ: YÖNLENDİRİCİ UYUMLULUK KATMANI =====================
-
     /**
      * Rate limit kuralları
      * [max_attempts, window_seconds, block_seconds]
@@ -100,7 +80,7 @@ class RateLimitMiddleware
             $data['blocked_until'] = time() + $blockSeconds;
             self::saveData($key, $data);
 
-            error_log("Bozok E-Ticaret RateLimit: $action blocked for IP $identifier");
+            error_log("V-Commerce RateLimit: $action blocked for IP $identifier");
 
             $remaining = $blockSeconds;
             self::respondBlocked($remaining, $action);

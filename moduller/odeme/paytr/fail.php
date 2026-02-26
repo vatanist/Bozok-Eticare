@@ -1,13 +1,11 @@
-<?php
-// ===================== BAŞLANGIÇ: PAYTR BAŞARISIZ SAYFA =====================
+// Config zaten modul-isleyici.php tarafından yüklendi
 requireLogin();
 
 $orderId = intval($_GET['id'] ?? 0);
 $veriler = [
-    'sayfa_basligi' => 'Ödeme Başarısız',
-    'basarili' => false,
-    'order_id' => $orderId
+'sayfa_basligi' => 'Ödeme Başarısız',
+'basarili' => false,
+'order_id' => $orderId
 ];
 
 gorunum('odeme-sonuc', $veriler);
-// ===================== BİTİŞ: PAYTR BAŞARISIZ SAYFA =====================

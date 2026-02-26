@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret - Bozkurt Core (Çekirdek Fonksiyonlar)
+ * V-Commerce - Bozkurt Core (Çekirdek Fonksiyonlar)
  * 
  * Sadece çekirdek fonksiyonları içerir:
  * - PHP 8 Polyfill'ler
@@ -15,7 +15,7 @@
  * Ürün, sepet, auth, medya fonksiyonları → app/Helpers/ altına taşındı.
  * Bootstrap/app.php tarafından otomatik yüklenir.
  *
- * @package BozokETicaret
+ * @package VCommerce
  * @version 2.0.0
  */
 
@@ -46,61 +46,11 @@ if (!function_exists('str_contains')) {
  * Site genelindeki tema ve modül ayarlarını tutar.
  */
 $bozkurt = [
-    'tema_adi' => 'varsayilan',
+    'tema_adi' => isset($db) ? ayar_getir('active_theme', 'varsayilan') : 'varsayilan',
     'modul_yolu' => __DIR__ . '/../moduller',
     'tema_yolu' => __DIR__ . '/../temalar',
-    'render_tema_adi' => null,
     'surum' => '2.0.0'
 ];
-
-// ===================== BAŞLANGIÇ: TEMA ÇÖZÜMLEME =====================
-/**
- * Tema adını geriye uyumluluk kuralları ile çözümler.
- */
-function tema_adi_cozumle($tema_adi)
-{
-    $tema_adi = trim((string) $tema_adi);
-
-    if (class_exists('TemaSozlesmesi')) {
-        return TemaSozlesmesi::temaAdiCozumle($tema_adi);
-    }
-
-    $takma_adlar = [
-        'shoptimizer' => 'svs-tema',
-    ];
-
-    return $takma_adlar[$tema_adi] ?? $tema_adi;
-}
-
-/**
- * Aktif tema adını güvenli şekilde günceller.
- */
-function aktif_tema_ayarla($tema_adi)
-{
-    global $bozkurt;
-
-    $tema_adi = tema_adi_cozumle($tema_adi ?: 'varsayilan');
-    $tema_klasor = $bozkurt['tema_yolu'] . '/' . $tema_adi;
-
-    if (!is_dir($tema_klasor)) {
-        $tema_adi = 'varsayilan';
-        $tema_klasor = $bozkurt['tema_yolu'] . '/varsayilan';
-    }
-
-    // ===================== BAŞLANGIÇ: TEMA SÖZLEŞMESİ FAIL-OPEN =====================
-    if (class_exists('TemaSozlesmesi')) {
-        $dogrulama = TemaSozlesmesi::temaSozlesmesiniDogrula($tema_klasor);
-        if (!($dogrulama['gecerli'] ?? false)) {
-            // Runtime'da siteyi ayakta tutmak için varsayılan temaya düş.
-            $tema_adi = 'varsayilan';
-        }
-    }
-    // ===================== BİTİŞ: TEMA SÖZLEŞMESİ FAIL-OPEN =====================
-
-    $bozkurt['tema_adi'] = $tema_adi;
-    return $bozkurt['tema_adi'];
-}
-// ===================== BİTİŞ: TEMA ÇÖZÜMLEME =====================
 
 // ==================== ÇEKİRDEK ARAÇLAR ====================
 
@@ -119,94 +69,7 @@ function git($adres)
     exit;
 }
 
-/**
- * Router uyumlu URL üretir.
- */
-function url($yol = '')
-{
-    $base = rtrim(BASE_URL, '/');
-    $yol = '/' . ltrim((string) $yol, '/');
-    return $base . $yol;
-}
-
-
-
-// ===================== BAŞLANGIÇ: OPTIONS API SARMALAYICILARI =====================
-/**
- * Seçenek değerini getirir.
- */
-function option_get($anahtar, $varsayilan = null, $grup = 'genel')
-{
-    if (!class_exists('SecenekServisi')) {
-        return $varsayilan;
-    }
-    return SecenekServisi::getir((string) $anahtar, $varsayilan, (string) $grup);
-}
-
-/**
- * Seçenek değerini kaydeder/günceller.
- */
-function option_set($anahtar, $deger, $grup = 'genel', $autoload = false)
-{
-    if (!class_exists('SecenekServisi')) {
-        return false;
-    }
-    return SecenekServisi::yaz((string) $anahtar, $deger, (string) $grup, (bool) $autoload);
-}
-
-/**
- * Seçeneği siler.
- */
-function option_delete($anahtar, $grup = 'genel')
-{
-    if (!class_exists('SecenekServisi')) {
-        return false;
-    }
-    return SecenekServisi::sil((string) $anahtar, (string) $grup);
-}
-
-/**
- * Seçenek var mı kontrol eder.
- */
-function option_has($anahtar, $grup = 'genel')
-{
-    if (!class_exists('SecenekServisi')) {
-        return false;
-    }
-    return SecenekServisi::varMi((string) $anahtar, (string) $grup);
-}
-
-/**
- * Bir seçeneğin grubunu toplu getirir.
- */
-function option_get_group($grup = 'genel')
-{
-    if (!class_exists('SecenekServisi')) {
-        return [];
-    }
-    return SecenekServisi::grupGetir((string) $grup);
-}
-// ===================== BİTİŞ: OPTIONS API SARMALAYICILARI =====================
-
 // ==================== TEMA SİSTEMİ ====================
-
-/**
- * Tema/görünüm girdisinde yasak karakter var mı kontrol eder.
- */
-function tema_gorunum_yasak_icerir($deger): bool
-{
-    return str_contains((string) $deger, '..')
-        || str_contains((string) $deger, "\0")
-        || str_contains((string) $deger, ':');
-}
-
-/**
- * Tema görünüm yolu doğrular.
- */
-function tema_gorunum_girdisi_dogrula($deger): bool
-{
-    return is_string($deger) && preg_match('#^[a-zA-Z0-9_\-/]+$#', $deger) === 1;
-}
 
 /**
  * Tema Şablonu Yükler (View)
@@ -221,120 +84,24 @@ function gorunum($yol, $veriler = [])
 {
     global $bozkurt;
 
-    // ===================== BAŞLANGIÇ: GÖRÜNÜM GİRDİ GÜVENLİĞİ =====================
-    if (tema_gorunum_yasak_icerir($yol) || !tema_gorunum_girdisi_dogrula((string) $yol)) {
-        throw new \App\Exceptions\ViewNotFoundException((string) $yol);
-    }
-    // ===================== BİTİŞ: GÖRÜNÜM GİRDİ GÜVENLİĞİ =====================
+    // Path traversal koruması
+    $yol = str_replace(['..', "\0"], '', $yol);
 
     if (!empty($veriler)) {
-        extract($veriler, EXTR_SKIP);
+        extract($veriler);
     }
 
     // Otomatik SEO meta değişkenleri
-    $meta_title = $veriler['sayfa_basligi'] ?? ayar_getir('site_title', 'Bozok E-Ticaret');
+    $meta_title = $veriler['sayfa_basligi'] ?? ayar_getir('site_title', 'V-Commerce');
     $meta_desc = $veriler['meta_desc'] ?? '';
 
-    // ===================== BAŞLANGIÇ: TEMA GÖRÜNÜM FALLBACK =====================
-    $aktif_sablon = $bozkurt['tema_yolu'] . '/' . $bozkurt['tema_adi'] . '/' . $yol . '.php';
-    $varsayilan_sablon = $bozkurt['tema_yolu'] . '/varsayilan/' . $yol . '.php';
+    $sablon = $bozkurt['tema_yolu'] . '/' . $bozkurt['tema_adi'] . '/' . $yol . '.php';
 
-    if (is_file($aktif_sablon)) {
-        $onceki_render_tema = $bozkurt['render_tema_adi'] ?? null;
-        $bozkurt['render_tema_adi'] = (string) $bozkurt['tema_adi'];
-        try {
-            require $aktif_sablon;
-        } finally {
-            $bozkurt['render_tema_adi'] = $onceki_render_tema;
-        }
-        return;
-    }
-
-    if (is_file($varsayilan_sablon)) {
-        $onceki_render_tema = $bozkurt['render_tema_adi'] ?? null;
-        $bozkurt['render_tema_adi'] = 'varsayilan';
-        try {
-            require $varsayilan_sablon;
-        } finally {
-            $bozkurt['render_tema_adi'] = $onceki_render_tema;
-        }
-        return;
-    }
-    // ===================== BİTİŞ: TEMA GÖRÜNÜM FALLBACK =====================
-
-    throw new \App\Exceptions\ViewNotFoundException((string) $yol);
-}
-
-/**
- * Belirtilen tema klasöründen görünüm yükler.
- * Örn: gorunum_tema('admin-temalar', $veriler, 'varsayilan')
- *
- * @throws \App\Exceptions\ViewNotFoundException
- */
-function gorunum_tema($yol, $veriler = [], $tema_adi = 'varsayilan')
-{
-    global $bozkurt;
-
-    // ===================== BAŞLANGIÇ: TEMA BAZLI GÖRÜNÜM GÜVENLİĞİ =====================
-    $tema_adi = tema_adi_cozumle((string) $tema_adi ?: 'varsayilan');
-
-    if (tema_gorunum_yasak_icerir($yol) || tema_gorunum_yasak_icerir($tema_adi)) {
-        error_log('Gorunum tema güvenlik doğrulaması başarısız.');
-        throw new \App\Exceptions\ViewNotFoundException((string) $yol);
-    }
-
-    if (!tema_gorunum_girdisi_dogrula((string) $yol) || !preg_match('#^[a-zA-Z0-9_-]+$#', (string) $tema_adi)) {
-        error_log('Gorunum tema regex doğrulaması başarısız.');
-        throw new \App\Exceptions\ViewNotFoundException((string) $yol);
-    }
-    // ===================== BİTİŞ: TEMA BAZLI GÖRÜNÜM GÜVENLİĞİ =====================
-
-    if (!empty($veriler)) {
-        extract($veriler, EXTR_SKIP);
-    }
-
-    $meta_title = $veriler['sayfa_basligi'] ?? ayar_getir('site_title', 'Bozok E-Ticaret');
-    $meta_desc = $veriler['meta_desc'] ?? '';
-
-    $sablon = $bozkurt['tema_yolu'] . '/' . $tema_adi . '/' . $yol . '.php';
-    if (is_file($sablon)) {
-        $onceki_render_tema = $bozkurt['render_tema_adi'] ?? null;
-        $bozkurt['render_tema_adi'] = (string) $tema_adi;
-        try {
-            require $sablon;
-        } finally {
-            $bozkurt['render_tema_adi'] = $onceki_render_tema;
-        }
-        return;
-    }
-
-    error_log('Gorunum tema bulunamadı: ' . $tema_adi . '/' . $yol);
-    throw new \App\Exceptions\ViewNotFoundException((string) $yol);
-}
-
-/**
- * Admin görünümlerini temadan bağımsız yükler.
- */
-function gorunum_admin($yol, $veriler = [])
-{
-    if (tema_gorunum_yasak_icerir($yol) || !preg_match('#^[a-zA-Z0-9_\-/]+$#', (string) $yol)) {
-        throw new \App\Exceptions\ViewNotFoundException((string) $yol);
-    }
-
-    if (!empty($veriler)) {
-        extract($veriler, EXTR_SKIP);
-    }
-
-    $base = defined('ROOT_PATH') ? ROOT_PATH : dirname(__DIR__) . DIRECTORY_SEPARATOR;
-    $sablon = $base . 'admin' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . $yol . '.php';
-
-    if (is_file($sablon)) {
+    if (file_exists($sablon)) {
         require $sablon;
-        return;
+    } else {
+        throw new \App\Exceptions\ViewNotFoundException($yol);
     }
-
-    error_log('Admin görünüm bulunamadı: ' . $yol);
-    throw new \App\Exceptions\ViewNotFoundException((string) $yol);
 }
 
 /**
@@ -344,8 +111,7 @@ function tema_linki($dosya = '')
 {
     global $bozkurt;
     $baseUrl = rtrim(BASE_URL, '/');
-    $kullanilan_tema = $bozkurt['render_tema_adi'] ?: $bozkurt['tema_adi'];
-    return $baseUrl . '/temalar/' . $kullanilan_tema . '/' . ltrim($dosya, '/');
+    return $baseUrl . '/temalar/' . $bozkurt['tema_adi'] . '/' . ltrim($dosya, '/');
 }
 
 // ==================== MODÜL & KANCA (HOOK) SİSTEMİ ====================
@@ -411,12 +177,6 @@ function hook_calistir($ad, $veriler = null)
 {
     global $bozkurt_hooks;
 
-    // ===================== BAŞLANGIÇ: KANCA ADI ÇÖZÜMLEME =====================
-    if (class_exists('TemaSozlesmesi')) {
-        $ad = TemaSozlesmesi::kancaAdiCozumle($ad);
-    }
-    // ===================== BİTİŞ: KANCA ADI ÇÖZÜMLEME =====================
-
     if (!isset($bozkurt_hooks[$ad])) {
         return $veriler;
     }
@@ -479,7 +239,7 @@ function modul_linki($kategori, $kod, $dosya = '')
 function tema_yolu($tema = '', $dosya = '')
 {
     global $bozkurt;
-    $tema = $tema ?: ($bozkurt['render_tema_adi'] ?: $bozkurt['tema_adi']);
+    $tema = $tema ?: $bozkurt['tema_adi'];
     return $bozkurt['tema_yolu'] . '/' . $tema . ($dosya ? '/' . $dosya : '');
 }
 
@@ -546,10 +306,7 @@ function csrf_kod()
 function dogrula_csrf()
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $istek_token = $_POST['csrf_token'] ?? '';
-        $oturum_token = $_SESSION['csrf_token'] ?? '';
-
-        if (!is_string($istek_token) || !is_string($oturum_token) || !hash_equals($oturum_token, $istek_token)) {
+        if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
             die("Güvenlik hatası: CSRF doğrulaması başarısız!");
         }
     }
@@ -583,37 +340,14 @@ function showFlash($a)
     return mesaj_goster($a);
 }
 
-
-// ===================== BAŞLANGIÇ: ÇEREZ YÖNETİMİ YARDIMCILARI =====================
-/**
- * Çerez tercihini döner.
- */
-function cerez_tercihi_getir(): array
+/** @deprecated v2.0'da kaldırılacak. csrf_kod() kullanın. */
+function csrfField()
 {
-    if (!class_exists('CerezYonetimi')) {
-        return [
-            'zorunlu' => true,
-            'analitik' => false,
-            'pazarlama' => false,
-            'tercih' => false,
-            'karar' => 'bekleniyor',
-        ];
-    }
-
-    return CerezYonetimi::tercihleriOku();
+    return csrf_kod();
 }
 
-/**
- * Belirli çerez kategorisi izinli mi?
- */
-function cerez_izinli_mi(string $kategori): bool
+/** @deprecated v2.0'da kaldırılacak. dogrula_csrf() kullanın. */
+function verifyCsrf()
 {
-    $tercih = cerez_tercihi_getir();
-
-    if ($kategori === 'zorunlu') {
-        return true;
-    }
-
-    return !empty($tercih[$kategori]);
+    return dogrula_csrf();
 }
-// ===================== BİTİŞ: ÇEREZ YÖNETİMİ YARDIMCILARI =====================

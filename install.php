@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret - Kurulum Sihirbazı
+ * V-Commerce - Kurulum Sihirbazı
  * İlk kurulumda veritabanı ve admin hesabı oluşturur.
  */
 session_start();
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
     $adminFirst = trim($_POST['admin_first'] ?? '');
     $adminLast = trim($_POST['admin_last'] ?? '');
 
-    $siteName = trim($_POST['site_name'] ?? 'Bozok E-Ticaret');
+    $siteName = trim($_POST['site_name'] ?? 'V-Commerce');
     $siteEmail = trim($_POST['site_email'] ?? '');
 
     // Validasyon
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
             // ========== TABLOLAR ==========
             // ========== TABLOLAR ==========
             $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
-            $pdo->exec("DROP TABLE IF EXISTS `wishlist`, `cart`, `order_items`, `orders`, `addresses`, `products`, `categories`, `users`, `settings`, `xml_imports`, `campaigns`, `campaign_usage`, `sliders`, `price_alerts`, `extensions`, `core_options`, `cms_page_revisions`, `cms_pages`, `cerez_izin_kayitlari`, `analytics_events` ");
+            $pdo->exec("DROP TABLE IF EXISTS `wishlist`, `cart`, `order_items`, `orders`, `addresses`, `products`, `categories`, `users`, `settings`, `xml_imports`, `campaigns`, `campaign_usage`, `sliders`, `price_alerts`, `extensions` ");
             $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
 
             $pdo->exec("CREATE TABLE `users` (
@@ -318,74 +318,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
             // Eklenti ve Tema Takip Tablosu
             $pdo->exec("CREATE TABLE IF NOT EXISTS `extensions` (
                 `id` INT AUTO_INCREMENT PRIMARY KEY,
-                `type` VARCHAR(50) NOT NULL COMMENT 'module, payment, shipping, marketing, theme',
+                `type` ENUM('module','theme') NOT NULL,
                 `category` VARCHAR(50) DEFAULT 'genel',
                 `code` VARCHAR(100) NOT NULL,
                 `status` TINYINT(1) DEFAULT 1,
                 `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE KEY `type_code` (`type`, `code`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-            // Core Options API tablosu
-            $pdo->exec("CREATE TABLE IF NOT EXISTS `core_options` (
-                `id` INT AUTO_INCREMENT PRIMARY KEY,
-                `grup_anahtari` VARCHAR(120) NOT NULL,
-                `secenek_anahtari` VARCHAR(150) NOT NULL,
-                `deger` LONGTEXT DEFAULT NULL,
-                `deger_tipi` VARCHAR(20) NOT NULL DEFAULT 'string',
-                `autoload` TINYINT(1) NOT NULL DEFAULT 0,
-                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-                UNIQUE KEY `uniq_grup_secenek` (`grup_anahtari`, `secenek_anahtari`),
-                KEY `idx_grup` (`grup_anahtari`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-            // Kurumsal CMS tabloları
-            $pdo->exec("CREATE TABLE IF NOT EXISTS `cms_pages` (
-                `id` INT AUTO_INCREMENT PRIMARY KEY,
-                `title` VARCHAR(255) NOT NULL,
-                `slug` VARCHAR(280) NOT NULL,
-                `icerik` LONGTEXT DEFAULT NULL,
-                `meta_title` VARCHAR(255) DEFAULT NULL,
-                `meta_description` VARCHAR(500) DEFAULT NULL,
-                `canonical_url` VARCHAR(500) DEFAULT NULL,
-                `sablon` VARCHAR(120) NOT NULL DEFAULT 'sayfa',
-                `durum` ENUM('taslak','yayinda') NOT NULL DEFAULT 'taslak',
-                `siralama` INT NOT NULL DEFAULT 0,
-                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-                UNIQUE KEY `uniq_slug` (`slug`),
-                KEY `idx_durum_siralama` (`durum`, `siralama`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-            $pdo->exec("CREATE TABLE IF NOT EXISTS `cms_page_revisions` (
-                `id` INT AUTO_INCREMENT PRIMARY KEY,
-                `page_id` INT NOT NULL,
-                `icerik` LONGTEXT DEFAULT NULL,
-                `duzenleyen_user_id` INT DEFAULT NULL,
-                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                KEY `idx_page_id` (`page_id`),
-                CONSTRAINT `fk_cms_rev_page` FOREIGN KEY (`page_id`) REFERENCES `cms_pages`(`id`) ON DELETE CASCADE
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-
-            // Çerez izin kayıtları (KVKK/GDPR)
-            $pdo->exec("CREATE TABLE IF NOT EXISTS `cerez_izin_kayitlari` (
-                `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                `anonim_id` VARCHAR(64) NOT NULL,
-                `user_id` INT NULL,
-                `ip_adresi` VARCHAR(64) NOT NULL,
-                `user_agent` VARCHAR(255) DEFAULT '',
-                `karar` ENUM('kabul','reddet','tercih') NOT NULL,
-                `analitik_izin` TINYINT(1) NOT NULL DEFAULT 0,
-                `pazarlama_izin` TINYINT(1) NOT NULL DEFAULT 0,
-                `tercih_izin` TINYINT(1) NOT NULL DEFAULT 0,
-                `kaynak` VARCHAR(50) DEFAULT 'banner',
-                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                KEY `idx_cerez_tarih` (`created_at`),
-                KEY `idx_cerez_anonim` (`anonim_id`),
-                KEY `idx_cerez_user` (`user_id`),
-                KEY `idx_cerez_karar` (`karar`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
 
             $pdo->exec("CREATE TABLE IF NOT EXISTS `product_attributes` (
@@ -539,32 +477,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
                 `page_url` TEXT,
                 `referrer` TEXT,
                 `session_id` VARCHAR(100),
-                `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-                KEY `idx_visitor_created_at` (`created_at`),
-                KEY `idx_visitor_session` (`session_id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-            // Analitik olayları (hafif event tablosu)
-            $pdo->exec("CREATE TABLE IF NOT EXISTS `analytics_events` (
-                `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                `event_name` VARCHAR(60) NOT NULL,
-                `page_url` VARCHAR(500) DEFAULT NULL,
-                `referrer` VARCHAR(500) DEFAULT NULL,
-                `product_id` INT DEFAULT NULL,
-                `user_id` INT DEFAULT NULL,
-                `anonim_id` VARCHAR(64) DEFAULT NULL,
-                `session_id` VARCHAR(100) DEFAULT NULL,
-                `ip` VARCHAR(64) DEFAULT NULL,
-                `il` VARCHAR(100) DEFAULT 'Bilinmiyor',
-                `ilce` VARCHAR(100) DEFAULT 'Bilinmiyor',
-                `tarayici` VARCHAR(50) DEFAULT 'Diger',
-                `cihaz_tipi` VARCHAR(30) DEFAULT 'Masaustu',
-                `user_agent` VARCHAR(255) DEFAULT '',
-                `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                KEY `idx_event_created_at` (`created_at`),
-                KEY `idx_event_adi_tarih` (`event_name`, `created_at`),
-                KEY `idx_event_anonim_tarih` (`anonim_id`, `created_at`),
-                KEY `idx_event_user_tarih` (`user_id`, `created_at`)
+                `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
 
             // Pazaryeri API Log Tablosu
@@ -677,7 +590,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
                 $stmt->execute(['general', $s[0], $s[1]]);
 
             // ========== db.php DOSYASINI YAZ ==========
-            $dbConfig = "<?php\n/**\n * Bozok E-Ticaret - Veritabanı Bağlantısı (PDO Singleton)\n */\n\nclass Database\n{\n    private static \$instance = null;\n    private \$pdo;\n\n    private \$host = " . var_export($dbHost, true) . ";\n    private \$dbname = " . var_export($dbName, true) . ";\n    private \$username = " . var_export($dbUser, true) . ";\n    private \$password = " . var_export($dbPass, true) . ";\n\n    private function __construct()\n    {\n        \$this->connect();\n    }\n\n    private function connect()\n    {\n        try {\n            \$this->pdo = new PDO(\n                \"mysql:host={\$this->host};dbname={\$this->dbname};charset=utf8mb4\",\n                \$this->username,\n                \$this->password,\n                [\n                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,\n                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,\n                    PDO::ATTR_EMULATE_PREPARES => false,\n                    PDO::MYSQL_ATTR_INIT_COMMAND => \"SET NAMES utf8mb4\"\n                ]\n            );\n        } catch (PDOException \$e) {\n            die(\"Veritabanı bağlantı hatası: \" . \$e->getMessage());\n        }\n    }\n\n    public static function getInstance()\n    {\n        if (self::\$instance === null) {\n            self::\$instance = new self();\n        }\n        return self::\$instance;\n    }\n\n    public function getConnection()\n    {\n        try {\n            \$this->pdo->query('SELECT 1');\n        } catch (PDOException \$e) {\n            \$this->connect();\n        }\n        return \$this->pdo;\n    }\n\n    public static function reconnect()\n    {\n        \$db = self::getInstance();\n        \$db->connect();\n    }\n\n    public static function query(\$sql, \$params = [])\n    {\n        \$pdo = self::getInstance()->getConnection();\n        try {\n            \$stmt = \$pdo->prepare(\$sql);\n            \$stmt->execute(\$params);\n            return \$stmt;\n        } catch (PDOException \$e) {\n            if (strpos(\$e->getMessage(), 'server has gone away') !== false || \$e->getCode() == 'HY000') {\n                self::reconnect();\n                \$pdo = self::getInstance()->getConnection();\n                \$stmt = \$pdo->prepare(\$sql);\n                \$stmt->execute(\$params);\n                return \$stmt;\n            }\n            throw \$e;\n        }\n    }\n\n    public static function fetch(\$sql, \$params = [])\n    {\n        return self::query(\$sql, \$params)->fetch();\n    }\n\n    public static function fetchAll(\$sql, \$params = [])\n    {\n        return self::query(\$sql, \$params)->fetchAll();\n    }\n\n    public static function lastInsertId()\n    {\n        return self::getInstance()->getConnection()->lastInsertId();\n    }\n}\n";
+            $dbConfig = "<?php\n/**\n * V-Commerce - Veritabanı Bağlantısı (PDO Singleton)\n */\n\nclass Database\n{\n    private static \$instance = null;\n    private \$pdo;\n\n    private \$host = " . var_export($dbHost, true) . ";\n    private \$dbname = " . var_export($dbName, true) . ";\n    private \$username = " . var_export($dbUser, true) . ";\n    private \$password = " . var_export($dbPass, true) . ";\n\n    private function __construct()\n    {\n        \$this->connect();\n    }\n\n    private function connect()\n    {\n        try {\n            \$this->pdo = new PDO(\n                \"mysql:host={\$this->host};dbname={\$this->dbname};charset=utf8mb4\",\n                \$this->username,\n                \$this->password,\n                [\n                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,\n                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,\n                    PDO::ATTR_EMULATE_PREPARES => false,\n                    PDO::MYSQL_ATTR_INIT_COMMAND => \"SET NAMES utf8mb4\"\n                ]\n            );\n        } catch (PDOException \$e) {\n            die(\"Veritabanı bağlantı hatası: \" . \$e->getMessage());\n        }\n    }\n\n    public static function getInstance()\n    {\n        if (self::\$instance === null) {\n            self::\$instance = new self();\n        }\n        return self::\$instance;\n    }\n\n    public function getConnection()\n    {\n        try {\n            \$this->pdo->query('SELECT 1');\n        } catch (PDOException \$e) {\n            \$this->connect();\n        }\n        return \$this->pdo;\n    }\n\n    public static function reconnect()\n    {\n        \$db = self::getInstance();\n        \$db->connect();\n    }\n\n    public static function query(\$sql, \$params = [])\n    {\n        \$pdo = self::getInstance()->getConnection();\n        try {\n            \$stmt = \$pdo->prepare(\$sql);\n            \$stmt->execute(\$params);\n            return \$stmt;\n        } catch (PDOException \$e) {\n            if (strpos(\$e->getMessage(), 'server has gone away') !== false || \$e->getCode() == 'HY000') {\n                self::reconnect();\n                \$pdo = self::getInstance()->getConnection();\n                \$stmt = \$pdo->prepare(\$sql);\n                \$stmt->execute(\$params);\n                return \$stmt;\n            }\n            throw \$e;\n        }\n    }\n\n    public static function fetch(\$sql, \$params = [])\n    {\n        return self::query(\$sql, \$params)->fetch();\n    }\n\n    public static function fetchAll(\$sql, \$params = [])\n    {\n        return self::query(\$sql, \$params)->fetchAll();\n    }\n\n    public static function lastInsertId()\n    {\n        return self::getInstance()->getConnection()->lastInsertId();\n    }\n}\n";
 
             file_put_contents(__DIR__ . '/config/db.php', $dbConfig);
 
@@ -700,7 +613,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bozok E-Ticaret Kurulum</title>
+    <title>V-Commerce Kurulum</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -1026,7 +939,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
     <div class="installer">
         <div class="installer-header">
             <div class="installer-logo">V</div>
-            <h1>Bozok E-Ticaret Kurulum</h1>
+            <h1>V-Commerce Kurulum</h1>
             <p>E-Ticaret platformunuzu birkaç adımda kurun</p>
         </div>
 
@@ -1154,7 +1067,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
                     <div class="form-group">
                         <label>Site Adı</label>
                         <input type="text" name="site_name"
-                            value="<?= htmlspecialchars($_POST['site_name'] ?? 'Bozok E-Ticaret') ?>">
+                            value="<?= htmlspecialchars($_POST['site_name'] ?? 'V-Commerce') ?>">
                     </div>
                     <div class="form-group">
                         <label>İletişim E-postası</label>
@@ -1172,7 +1085,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
                 <div class="success-card">
                     <div class="icon"><i class="fas fa-check"></i></div>
                     <h2>Kurulum Tamamlandı! 🎉</h2>
-                    <p>Bozok E-Ticaret başarıyla kuruldu. Artık e-ticaret sitenizi yönetmeye başlayabilirsiniz.</p>
+                    <p>V-Commerce başarıyla kuruldu. Artık e-ticaret sitenizi yönetmeye başlayabilirsiniz.</p>
                     <div class="success-links">
                         <a href="admin/login.php" class="primary"><i class="fas fa-lock"></i> Admin Paneli</a>
                         <a href="index.php" class="secondary"><i class="fas fa-home"></i> Ana Sayfa</a>

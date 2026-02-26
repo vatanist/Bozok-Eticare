@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret — CheckoutController
+ * V-Commerce — CheckoutController
  *
  * Ödeme sayfası görünümü ve sipariş oluşturma.
  * odeme.php'deki iş mantığını barındırır.

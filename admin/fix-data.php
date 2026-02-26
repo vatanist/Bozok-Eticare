@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret - Veri Temizleme Scripti
+ * V-Commerce - Veri Temizleme Scripti
  *
  * Bu script:
  * 1. image alanında 'Array' yazan ürünleri NULL'a düzeltir

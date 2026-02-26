@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="base-url" content="<?= BASE_URL ?>">
     <?php
-    $siteName = getSetting('site_name', 'Bozok E-Ticaret');
+    $siteName = getSetting('site_name', 'V-Commerce');
     $siteDesc = getSetting('site_description', 'Modern E-Ticaret Platformu');
     $fullTitle = isset($pageTitle) ? e($pageTitle) . ' - ' . e($siteName) : e($siteName);
     $metaDesc = isset($pageDesc) ? e($pageDesc) : e($siteDesc);
@@ -85,7 +85,7 @@
         <div class="header-inner">
             <a href="<?= BASE_URL ?>/" class="logo">
                 <div class="logo-icon">V</div>
-                Bozok E-Ticaret
+                V-Commerce
             </a>
 
             <div class="search-bar">

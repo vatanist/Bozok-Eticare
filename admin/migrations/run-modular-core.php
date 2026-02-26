@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret — Modüler Çekirdek Migration
+ * V-Commerce — Modüler Çekirdek Migration
  * extensions tablosunu oluşturur.
  */
 require_once __DIR__ . '/../../config/config.php';

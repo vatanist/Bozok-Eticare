@@ -16,13 +16,6 @@ $order = Database::fetch("SELECT * FROM orders WHERE id = ? AND user_id = ?", [$
 if (!$order)
     git('/client/orders.php');
 
-
-// ===================== BAŞLANGIÇ: SINIF YÜKLEME GÜVENCESİ =====================
-if (!class_exists('Paytr_Gateway')) {
-    require_once __DIR__ . '/includes/Paytr_Gateway.php';
-}
-// ===================== BİTİŞ: SINIF YÜKLEME GÜVENCESİ =====================
-
 // Sınıfı Başlat ve Token Al (OOP Style & WooCommerce Standartı)
 $gateway = new Paytr_Gateway();
 $sonuc = $gateway->get_payment_token($order, $user);

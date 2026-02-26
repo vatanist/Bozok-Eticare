@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret — HomeController
+ * V-Commerce — HomeController
  *
  * Anasayfa: öne çıkan ürünler, yeni ürünler, kategoriler.
  *
@@ -17,9 +17,9 @@ class HomeController extends BaseController
     public function index(): void
     {
         $veriler = [
-            'sayfa_basligi' => ayar_getir('site_title', 'Bozok E-Ticaret'),
+            'sayfa_basligi' => ayar_getir('site_title', 'V-Commerce'),
             'one_cikanlar' => one_cikan_urunler(8),
-            'en_yeniler' => en_yeni_urunler(8),
+            'yeni_urunler' => en_yeni_urunler(8),
             'kategoriler' => kategorileri_getir()
         ];
 

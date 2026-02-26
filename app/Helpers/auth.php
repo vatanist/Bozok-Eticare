@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret — Kimlik Doğrulama Yardımcıları
+ * V-Commerce — Kimlik Doğrulama Yardımcıları
  *
  * Kullanıcı oturumu kontrolü, yetkilendirme, brute-force koruması.
  *

@@ -2,7 +2,7 @@
 
 /**
  * Notification & Push Engine
- * Bozok E-Ticaret Enterprise Omnichannel Messaging
+ * V-Commerce Enterprise Omnichannel Messaging
  */
 class Notification
 {

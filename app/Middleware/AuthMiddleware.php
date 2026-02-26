@@ -19,33 +19,6 @@ namespace App\Middleware;
  */
 class AuthMiddleware
 {
-
-    // ===================== BAŞLANGIÇ: YÖNLENDİRİCİ UYUMLULUK KATMANI =====================
-    /**
-     * Yönlendirici ara katman sözleşmesi.
-     */
-    public static function handle($param = null)
-    {
-        return self::calistir($param);
-    }
-
-    /**
-     * Ara katman ana çalıştırıcısı.
-     */
-    public static function calistir($param = null): bool
-    {
-        $hedef = is_string($param) ? trim($param) : '';
-
-        if ($hedef === 'admin') {
-            self::requireAdmin();
-            return true;
-        }
-
-        self::requireCustomer();
-        return true;
-    }
-    // ===================== BİTİŞ: YÖNLENDİRİCİ UYUMLULUK KATMANI =====================
-
     /**
      * Admin girişi zorunlu — yoksa login'e yönlendir
      */

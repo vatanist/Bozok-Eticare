@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$rl['locked']) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Giriş - Bozok E-Ticaret</title>
+    <title>Admin Giriş - V-Commerce</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/components.css">
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$rl['locked']) {
     <div class="auth-wrapper" style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#1a56db 100%)">
         <div class="auth-card">
             <div class="logo" style="justify-content:center">
-                <div class="logo-icon">B</div> Bozok E-Ticaret
+                <div class="logo-icon">V</div> V-Commerce
             </div>
             <h2><i class="fas fa-shield-alt" style="color:var(--primary)"></i> Admin Paneli</h2>
 

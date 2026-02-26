@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret - Veritabanı Bağlantısı (PDO Singleton)
+ * V-Commerce - Veritabanı Bağlantısı (PDO Singleton)
  * 
  * v2.0: .env desteği eklendi. Önce .env'den okur,
  * yoksa eski hardcoded değerlere düşer (geriye uyumluluk).

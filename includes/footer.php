@@ -4,7 +4,7 @@
 <footer class="site-footer">
     <div class="footer-grid">
         <div class="footer-col">
-            <h4>Bozok E-Ticaret</h4>
+            <h4>V-Commerce</h4>
             <p>Elektronik ürünlerde güvenilir alışveriş deneyimi. En yeni teknoloji ürünlerini en uygun fiyatlarla
                 sizlere sunuyoruz.</p>
             <div class="footer-social">
@@ -71,15 +71,12 @@
     <div class="footer-bottom">
         <div class="container">
             &copy;
-            <?= date('Y') ?> Bozok E-Ticaret. Tüm hakları saklıdır.
+            <?= date('Y') ?> V-Commerce. Tüm hakları saklıdır.
         </div>
     </div>
 </footer>
 
 <script src="<?= BASE_URL ?>/assets/js/main.js"></script>
-
-<?php require_once __DIR__ . '/cerez-banner.php'; ?>
-
 </body>
 
 </html>

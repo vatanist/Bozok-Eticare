@@ -58,7 +58,7 @@ $pageTitle = 'Giriş Yap';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giriş Yap - Bozok E-Ticaret</title>
+    <title>Giriş Yap - V-Commerce</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/components.css">
@@ -70,7 +70,7 @@ $pageTitle = 'Giriş Yap';
         <div class="auth-card">
             <a href="<?= BASE_URL ?>/" class="logo">
                 <div class="logo-icon">V</div>
-                Bozok E-Ticaret
+                V-Commerce
             </a>
             <h2>Hesabınıza Giriş Yapın</h2>
 

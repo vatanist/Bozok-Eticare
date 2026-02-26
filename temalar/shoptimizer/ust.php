@@ -5,15 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-        <?= isset($sayfa_basligi) ? $sayfa_basligi . ' - ' : '' ?>Bozok E-Ticaret Svs Tema
+        <?= isset($sayfa_basligi) ? $sayfa_basligi . ' - ' : '' ?>V-Commerce Shoptimizer
     </title>
-
-    <?php if (!empty($meta_desc)): ?>
-        <meta name="description" content="<?= temiz($meta_desc) ?>">
-    <?php endif; ?>
-    <?php if (!empty($canonical_url)): ?>
-        <link rel="canonical" href="<?= temiz($canonical_url) ?>">
-    <?php endif; ?>
 
     <!-- Shoptimizer CSS Assets -->
     <link rel="stylesheet" href="<?= tema_linki('style.css') ?>">
@@ -21,11 +14,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-    <?php hook_calistir('head_basi'); ?>
-    <?php hook_calistir('head_sonu'); ?>
+    <?php hook_calistir('ust_basi'); ?>
 </head>
 
-<body class="shoptimizer-port theme-svs-tema">
+<body class="shoptimizer-port theme-shoptimizer">
 
     <div id="page" class="hfeed site">
 
@@ -38,7 +30,7 @@
                     <i class="fas fa-truck"></i> Ücretsiz Kargo - 1000 TL ve Üzeri
                 </div>
                 <div class="top-bar-right" style="display: flex; gap: 20px;">
-                    <a href="<?= url('hesabim') ?>" style="color: inherit; text-decoration: none;"><i
+                    <a href="<?= BASE_URL ?>/client/index.php" style="color: inherit; text-decoration: none;"><i
                             class="fas fa-user"></i> Hesabım</a>
                     <a href="<?= BASE_URL ?>/sayfa/iletisim" style="color: inherit; text-decoration: none;"><i
                             class="fas fa-headset"></i> Yardım</a>
@@ -65,7 +57,7 @@
 
                 <!-- Arama -->
                 <div class="product-search" style="flex: 1; margin: 0 50px; position: relative;">
-                    <form action="<?= url('ara') ?>" method="GET">
+                    <form action="<?= BASE_URL ?>/search.php" method="GET">
                         <input type="text" name="q" placeholder="Ürün, kategori veya marka ara..."
                             style="width: 100%; padding: 12px 25px; border: 2px solid #f1f5f9; border-radius: 30px; outline: none; transition: 0.3s;"
                             onfocus="this.style.borderColor='var(--primary)'">
@@ -78,7 +70,7 @@
                 <!-- Header Actions -->
                 <div class="header-actions" style="display: flex; gap: 25px; align-items: center;">
                     <div class="header-cart">
-                        <a href="<?= url('sepet') ?>"
+                        <a href="<?= BASE_URL ?>/sepet.php"
                             style="position: relative; color: var(--dark); font-size: 22px;">
                             <i class="fas fa-shopping-basket"></i>
                             <span
@@ -95,7 +87,7 @@
             <div class="col-full" style="max-width: 1200px; margin: 0 auto; padding: 0 15px; display: flex; gap: 30px;">
                 <a href="<?= BASE_URL ?>"
                     style="font-weight: 700; color: var(--dark); text-decoration: none;">Anasayfa</a>
-                <a href="<?= url('urunler') ?>"
+                <a href="<?= BASE_URL ?>/urunler.php"
                     style="font-weight: 700; color: var(--dark); text-decoration: none;">Tüm Ürünler</a>
                 <!-- Kategoriler buraya dinamik gelebilir -->
             </div>

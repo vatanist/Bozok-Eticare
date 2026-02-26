@@ -18,32 +18,6 @@ namespace App\Middleware;
  */
 class CsrfMiddleware
 {
-
-    // ===================== BAŞLANGIÇ: YÖNLENDİRİCİ UYUMLULUK KATMANI =====================
-    /**
-     * Yönlendirici ara katman sözleşmesi.
-     */
-    public static function handle($param = null)
-    {
-        return self::calistir($param);
-    }
-
-    /**
-     * Ara katman ana çalıştırıcısı.
-     */
-    public static function calistir($param = null): bool
-    {
-        $yontem = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
-        $dogrulanan_yontemler = ['POST', 'PUT', 'PATCH', 'DELETE'];
-
-        if (!in_array($yontem, $dogrulanan_yontemler, true)) {
-            return true;
-        }
-
-        return self::verify(true);
-    }
-    // ===================== BİTİŞ: YÖNLENDİRİCİ UYUMLULUK KATMANI =====================
-
     /** @var string Session anahtarı */
     private const SESSION_KEY = '_csrf_token';
 

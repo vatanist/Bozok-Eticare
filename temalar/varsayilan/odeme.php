@@ -6,8 +6,7 @@
 
     <?php mesaj_goster('odeme'); ?>
 
-    <form action="<?= BASE_URL ?>/siparis-tamamla" method="POST">
-        <?= csrf_kod() ?>
+    <form action="<?= BASE_URL ?>/odeme.php" method="POST">
         <div class="checkout-layout" style="display:grid; grid-template-columns: 1fr 400px; gap:40px;">
 
             <!-- Sol Taraf: Formlar -->

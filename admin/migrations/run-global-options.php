@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret — Global Seçenekler (Options) Migration
+ * V-Commerce — Global Seçenekler (Options) Migration
  * OpenCart tarzı varyasyon sistemi için gerekli tablolar.
  */
 require_once __DIR__ . '/../../config/config.php';

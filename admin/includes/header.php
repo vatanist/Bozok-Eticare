@@ -11,7 +11,7 @@ $adminUser = currentUser();
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>
-                <?= isset($pageTitle) ? e($pageTitle) . ' - ' : '' ?>Admin | Bozok E-Ticaret
+                <?= isset($pageTitle) ? e($pageTitle) . ' - ' : '' ?>Admin | V-Commerce
         </title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@ $adminUser = currentUser();
 <body>
         <aside class="admin-sidebar">
                 <div class="admin-logo">
-                        <div class="icon">B</div> Bozok E-Ticaret
+                        <div class="icon">V</div> V-Commerce
                 </div>
                 <nav class="admin-nav">
                         <span class="admin-nav-section">E-Ticaret</span>
@@ -56,9 +56,6 @@ $adminUser = currentUser();
                         <a href="<?= BASE_URL ?>/admin/istatistikler.php"
                                 class="<?= ($adminPage ?? '') === 'analytics' ? 'active' : '' ?>"><i
                                         class="fas fa-chart-line"></i> Ziyaretçi Analitiği</a>
-                        <a href="<?= BASE_URL ?>/admin/cerez-yonetimi.php"
-                                class="<?= ($adminPage ?? '') === 'cookie_management' ? 'active' : '' ?>"><i
-                                        class="fas fa-cookie-bite"></i> Çerez Yönetimi</a>
 
                         <span class="admin-nav-section">Pazarlama</span>
                         <a href="<?= BASE_URL ?>/admin/kampanyalar.php"
@@ -69,7 +66,7 @@ $adminUser = currentUser();
                                         class="fas fa-images"></i> Slider (Manşet)</a>
 
                         <span class="admin-nav-section">İçerik</span>
-                        <a href="<?= BASE_URL ?>/admin/cms-sayfalar.php"
+                        <a href="<?= BASE_URL ?>/admin/sayfalar.php"
                                 class="<?= ($adminPage ?? '') === 'pages' ? 'active' : '' ?>"><i
                                         class="fas fa-file-alt"></i> Bilgi Sayfaları</a>
 

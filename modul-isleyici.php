@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret - Modül Dosya İşleyicisi (Router Bridge)
+ * V-Commerce - Modül Dosya İşleyicisi (Router Bridge)
  * Modüllerin izole dosyalarını (callback, success vb.) dış dünyaya açar.
  * Örn: /modul-isleyici.php?modul=paytr&sayfa=callback
  *
@@ -15,7 +15,7 @@ require_once 'config/config.php';
 // Ödeme callback log (debug modunda)
 if (function_exists('isDebug') && isDebug()) {
     error_log(sprintf(
-        'Bozok E-Ticaret ModulHandler: %s %s?%s [IP: %s]',
+        'V-Commerce ModulHandler: %s %s?%s [IP: %s]',
         $_SERVER['REQUEST_METHOD'] ?? 'UNKNOWN',
         $_SERVER['SCRIPT_NAME'] ?? '',
         $_SERVER['QUERY_STRING'] ?? '',
@@ -56,7 +56,7 @@ if (
     !preg_match('/^[a-zA-Z0-9_-]+$/', $modul['code'])
 ) {
     http_response_code(500);
-    error_log('Bozok E-Ticaret: Veritabanında geçersiz modül verisi: ' . $modul['code']);
+    error_log('V-Commerce: Veritabanında geçersiz modül verisi: ' . $modul['code']);
     die('Sistem hatası.');
 }
 

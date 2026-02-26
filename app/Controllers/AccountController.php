@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret — AccountController
+ * V-Commerce — AccountController
  *
  * Müşteri paneli: hesabım, siparişler, adresler, favoriler, fiyat alarmları.
  * client/ altındaki dosyaları Controller'a taşır.

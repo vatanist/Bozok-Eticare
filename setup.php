@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret - Veritabanı Kurulum Scripti
+ * V-Commerce - Veritabanı Kurulum Scripti
  * Bu script veritabanını ve tabloları oluşturur, demo verileri ekler.
  */
 
@@ -179,110 +179,12 @@ try {
     // Extensions
     $pdo->exec("CREATE TABLE IF NOT EXISTS `extensions` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `type` VARCHAR(50) NOT NULL COMMENT 'module, payment, shipping, marketing, theme',
+        `type` ENUM('module','theme') NOT NULL,
         `category` VARCHAR(50) DEFAULT 'genel',
         `code` VARCHAR(100) NOT NULL,
         `status` TINYINT(1) DEFAULT 1,
         `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
         UNIQUE KEY `type_code` (`type`, `code`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-    // Core Options
-    $pdo->exec("CREATE TABLE IF NOT EXISTS `core_options` (
-        `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `grup_anahtari` VARCHAR(120) NOT NULL,
-        `secenek_anahtari` VARCHAR(150) NOT NULL,
-        `deger` LONGTEXT DEFAULT NULL,
-        `deger_tipi` VARCHAR(20) NOT NULL DEFAULT 'string',
-        `autoload` TINYINT(1) NOT NULL DEFAULT 0,
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-        UNIQUE KEY `uniq_grup_secenek` (`grup_anahtari`, `secenek_anahtari`),
-        KEY `idx_grup` (`grup_anahtari`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-    // Kurumsal CMS tabloları
-    $pdo->exec("CREATE TABLE IF NOT EXISTS `cms_pages` (
-        `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `title` VARCHAR(255) NOT NULL,
-        `slug` VARCHAR(280) NOT NULL,
-        `icerik` LONGTEXT DEFAULT NULL,
-        `meta_title` VARCHAR(255) DEFAULT NULL,
-        `meta_description` VARCHAR(500) DEFAULT NULL,
-        `canonical_url` VARCHAR(500) DEFAULT NULL,
-        `sablon` VARCHAR(120) NOT NULL DEFAULT 'sayfa',
-        `durum` ENUM('taslak','yayinda') NOT NULL DEFAULT 'taslak',
-        `siralama` INT NOT NULL DEFAULT 0,
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        `updated_at` DATETIME NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-        UNIQUE KEY `uniq_slug` (`slug`),
-        KEY `idx_durum_siralama` (`durum`, `siralama`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-    $pdo->exec("CREATE TABLE IF NOT EXISTS `cms_page_revisions` (
-        `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `page_id` INT NOT NULL,
-        `icerik` LONGTEXT DEFAULT NULL,
-        `duzenleyen_user_id` INT DEFAULT NULL,
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        KEY `idx_page_id` (`page_id`),
-        CONSTRAINT `fk_setup_cms_rev_page` FOREIGN KEY (`page_id`) REFERENCES `cms_pages`(`id`) ON DELETE CASCADE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-
-    // Çerez izin kayıtları (KVKK/GDPR)
-    $pdo->exec("CREATE TABLE IF NOT EXISTS `cerez_izin_kayitlari` (
-        `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        `anonim_id` VARCHAR(64) NOT NULL,
-        `user_id` INT NULL,
-        `ip_adresi` VARCHAR(64) NOT NULL,
-        `user_agent` VARCHAR(255) DEFAULT '',
-        `karar` ENUM('kabul','reddet','tercih') NOT NULL,
-        `analitik_izin` TINYINT(1) NOT NULL DEFAULT 0,
-        `pazarlama_izin` TINYINT(1) NOT NULL DEFAULT 0,
-        `tercih_izin` TINYINT(1) NOT NULL DEFAULT 0,
-        `kaynak` VARCHAR(50) DEFAULT 'banner',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        KEY `idx_cerez_tarih` (`created_at`),
-        KEY `idx_cerez_anonim` (`anonim_id`),
-        KEY `idx_cerez_user` (`user_id`),
-        KEY `idx_cerez_karar` (`karar`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-    // Ziyaretçi logları
-    $pdo->exec("CREATE TABLE IF NOT EXISTS `visitor_logs` (
-        `id` INT AUTO_INCREMENT PRIMARY KEY,
-        `ip` VARCHAR(45),
-        `user_agent` TEXT,
-        `page_url` TEXT,
-        `referrer` TEXT,
-        `session_id` VARCHAR(100),
-        `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-        KEY `idx_visitor_created_at` (`created_at`),
-        KEY `idx_visitor_session` (`session_id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
-
-    // Analitik olayları (hafif event tablosu)
-    $pdo->exec("CREATE TABLE IF NOT EXISTS `analytics_events` (
-        `id` BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        `event_name` VARCHAR(60) NOT NULL,
-        `page_url` VARCHAR(500) DEFAULT NULL,
-        `referrer` VARCHAR(500) DEFAULT NULL,
-        `product_id` INT DEFAULT NULL,
-        `user_id` INT DEFAULT NULL,
-        `anonim_id` VARCHAR(64) DEFAULT NULL,
-        `session_id` VARCHAR(100) DEFAULT NULL,
-        `ip` VARCHAR(64) DEFAULT NULL,
-        `il` VARCHAR(100) DEFAULT 'Bilinmiyor',
-        `ilce` VARCHAR(100) DEFAULT 'Bilinmiyor',
-        `tarayici` VARCHAR(50) DEFAULT 'Diger',
-        `cihaz_tipi` VARCHAR(30) DEFAULT 'Masaustu',
-        `user_agent` VARCHAR(255) DEFAULT '',
-        `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        KEY `idx_event_created_at` (`created_at`),
-        KEY `idx_event_adi_tarih` (`event_name`, `created_at`),
-        KEY `idx_event_anonim_tarih` (`anonim_id`, `created_at`),
-        KEY `idx_event_user_tarih` (`user_id`, `created_at`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_turkish_ci");
 
     // XML Imports Log
@@ -304,7 +206,7 @@ try {
     // Admin kullanıcı
     $adminPass = password_hash('admin123', PASSWORD_DEFAULT);
     $stmt = $pdo->prepare("INSERT IGNORE INTO `users` (username, email, password, first_name, last_name, role, status) VALUES (?, ?, ?, ?, ?, 'admin', 1)");
-    $stmt->execute(['admin', 'admin@vcommerce.com', $adminPass, 'Admin', 'Bozok E-Ticaret']);
+    $stmt->execute(['admin', 'admin@vcommerce.com', $adminPass, 'Admin', 'V-Commerce']);
 
     // Demo müşteri
     $customerPass = password_hash('123456', PASSWORD_DEFAULT);
@@ -385,7 +287,7 @@ try {
 
     // Site Ayarları
     $settings = [
-        ['site_name', 'Bozok E-Ticaret'],
+        ['site_name', 'V-Commerce'],
         ['site_description', 'Elektronik Ürünlerde Güvenilir Alışveriş'],
         ['site_email', 'info@vcommerce.com'],
         ['site_phone', '+90 555 000 00 00'],

@@ -13,7 +13,7 @@
     </header>
 
     <div class="content-body" style="line-height: 1.8; color: #334155; font-size: 1.15rem;">
-        <?= $sayfa['icerik_guvenli'] ?>
+        <?= $sayfa['content'] ?>
     </div>
 
 </article>

@@ -2,7 +2,7 @@
 
 /**
  * Order Master Engine
- * Bozok E-Ticaret Enterprise Order Management
+ * V-Commerce Enterprise Order Management
  */
 class Order
 {

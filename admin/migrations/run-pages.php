@@ -1,6 +1,6 @@
 <?php
 /**
- * Bozok E-Ticaret — Sayfa Yönetimi Migration
+ * V-Commerce — Sayfa Yönetimi Migration
  * pages tablosunu oluşturur ve varsayılan hukuki sayfaları ekler.
  *
  * KULLANIM: /admin/migrations/run-pages.php
