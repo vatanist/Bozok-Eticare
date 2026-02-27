@@ -7,6 +7,7 @@
 - Sitemap ve temel SEO alanları (meta/canonical)
 
 ## Değişen Dosyalar
+Not: Bu liste P1-PR3 geliştirmesinde değişen dosyaları referans amaçlıdır; bu PR yalnızca doküman güncellemesidir.
 - `install.php`
 - `setup.php`
 - `core/Auth.php`
@@ -48,6 +49,7 @@
 - Dosya/çalışma yolları `open_basedir` kısıtlarına uygun tutuldu.
 
 ## DirectAdmin Gerçek DB Smoke Test (Adım Adım)
+Not: `.env` değerleri örnektir; gerçek bilgileri commit etmeyin.
 1. DirectAdmin panelinde proje dizinindeki `.env` dosyasını aç ve `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS` değerlerini gerçek sunucu bilgileriyle doldur.
 2. Tarayıcıdan `/install.php` çalıştır; kurulum tamamlandıktan sonra veritabanında `cms_pages` ve `cms_page_revisions` tablolarının oluştuğunu kontrol et.
 3. Admin panelde **Kurumsal CMS** ekranına gir (`/admin/cms-sayfalar.php`):
