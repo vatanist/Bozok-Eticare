@@ -539,14 +539,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
             // Özellikler
             $pdo->exec("INSERT INTO `attributes` (name) VALUES ('Marka'), ('Garanti Süresi'), ('Materyal'), ('Ekran Boyutu')");
 
-            // Seçenekler (Varyasyonlar için)
-            $pdo->exec("INSERT INTO `options` (name, type) VALUES ('Renk', 'select'), ('Beden', 'select'), ('Numara', 'select')");
-            $colorOptId = $pdo->lastInsertId() - 2;
-            $sizeOptId = $pdo->lastInsertId() - 1;
+            // Seçenekler (Varyasyonlar için) - tekrar çalıştırılabilir ve güvenli seed
+            $optionSeedList = [
+                'Renk' => ['Siyah', 'Beyaz', 'Kırmızı'],
+                'Beden' => ['S', 'M', 'L', 'XL'],
+                'Numara' => []
+            ];
 
-            $pdo->exec("INSERT INTO `option_values` (option_id, name) VALUES 
-                ($colorOptId, 'Siyah'), ($colorOptId, 'Beyaz'), ($colorOptId, 'Kırmızı'),
-                ($sizeOptId, 'S'), ($sizeOptId, 'M'), ($sizeOptId, 'L'), ($sizeOptId, 'XL')");
+            $optionExistsStmt = $pdo->prepare("SELECT `id` FROM `options` WHERE `name` = ? LIMIT 1");
+            $optionInsertStmt = $pdo->prepare("INSERT INTO `options` (`name`, `type`) VALUES (?, 'select')");
+            $optionValueExistsStmt = $pdo->prepare("SELECT `id` FROM `option_values` WHERE `option_id` = ? AND `name` = ? LIMIT 1");
+            $optionValueInsertStmt = $pdo->prepare("INSERT INTO `option_values` (`option_id`, `name`) VALUES (?, ?)");
+
+            foreach ($optionSeedList as $optionName => $optionValues) {
+                $optionExistsStmt->execute([$optionName]);
+                $optionId = (int) $optionExistsStmt->fetchColumn();
+
+                if ($optionId <= 0) {
+                    $optionInsertStmt->execute([$optionName]);
+                    $optionId = (int) $pdo->lastInsertId();
+                }
+
+                if ($optionId <= 0) {
+                    throw new RuntimeException("Kurulum hatası: '{$optionName}' seçeneği oluşturulamadı.");
+                }
+
+                foreach ($optionValues as $optionValueName) {
+                    $optionValueExistsStmt->execute([$optionId, $optionValueName]);
+                    $optionValueId = (int) $optionValueExistsStmt->fetchColumn();
+
+                    if ($optionValueId > 0) {
+                        continue;
+                    }
+
+                    $optionValueInsertStmt->execute([$optionId, $optionValueName]);
+                }
+            }
 
             // Varsayılan Modüller & Ödeme Metotları
             $pdo->exec("INSERT INTO `extensions` (type, category, code, status) VALUES
@@ -603,6 +631,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
 
         } catch (PDOException $e) {
             $error = 'Veritabanı hatası: ' . $e->getMessage();
+        } catch (RuntimeException $e) {
+            $error = $e->getMessage();
         }
     }
 }
