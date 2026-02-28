@@ -4,8 +4,13 @@
  * Profesyonel Aktif/Pasif Kontrollü Yükleyici
  */
 
-if (!isset($bozkurt)) {
+if (!defined('ROOT_PATH')) {
+    http_response_code(403);
     die("Doğrudan erişim engellendi.");
+}
+
+if (!isset($bozkurt) || !is_array($bozkurt)) {
+    return;
 }
 
 $modul_yolu = $bozkurt['modul_yolu'];
